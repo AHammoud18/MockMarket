@@ -24,8 +24,6 @@ import XCAStocksAPI
     let now = Date()
     @Published var currentTime = ""
     @AppStorage ("marketTime") var isMarketOpen = false
-    var timeH = 9
-    var timeM = 30
     var dateComponents = DateComponents()
     var date: [String] = []
     let dateFormat = DateFormatter()
@@ -40,9 +38,6 @@ import XCAStocksAPI
     }
     
     func refreshStock(){
-        //loadTicker()
-        print("hi")
-        debugPrint(self.stockTicker)
         self.stockPrice[0].append(self.stockTicker.last!.regularMarketPrice!)
     }
     
@@ -66,7 +61,6 @@ import XCAStocksAPI
             self.stockPrice[0].insert(self.stockData[0][i].close, at: i)
         }
         
-        print(self.stockPrice[0])
     }
     
     

@@ -67,7 +67,7 @@ struct StockPage: View{
                         )
                     )
                 }.frame(width: geo.frame(in: .global).maxX/1.2, height: geo.frame(in: .global).maxY/3)
-                    .position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY*1.4)
+                    .position(x: X, y: Y*1.4)
                     .groupBoxStyle(chartBoxStyle())
             }
             .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
@@ -92,7 +92,7 @@ struct LoadingScreen: View{
                     .padding()
                     .onReceive(timer){ _ in
                         if progress <= 4 && loadedStock == false{
-                            progress += 2
+                            progress += 4
                         }
                         else if progress >= 5{
                             loadedStock = true
@@ -125,29 +125,37 @@ struct CompanyStockView: View{
             let X = geo.frame(in: .local).midX
             let Y = geo.frame(in: .local).midY
             VStack(spacing: 1){
-                section
-                    .frame(width: geo.size.width ,height: Y/6)
-                    .overlay(Divider())
+                Text(self.stockInfo.ticker ?? "default")
+                    .font(Font.system(size: 20))
+                    .bold()
+                Text(self.stockInfo.stockTicker.last?.displayName ?? "company")
+                Divider()
                 ScrollView(showsIndicators: false){
                     VStack(spacing: 2){
+                        Text("\(self.stockInfo.stockTicker.last?.regularMarketPrice ?? 0.0, specifier: "%0.2f" )")
+                            .bold()
+                            .offset(y: 5)
+                        Text("")
+                        Rectangle()
+                            .frame(height: 40)
+                            .foregroundColor(.clear)
+                        Divider()
                         Chart()
-                            .frame(width: geo.size.width ,height: geo.size.height/2)
+                            .frame(width: geo.size.width/1.2 ,height: geo.size.height/3.5)
                         Divider()
                         RoundedRectangle(cornerRadius: 8)
+                            .foregroundColor(.clear)
                             .frame(width: geo.size.width ,height: geo.size.height/2)
+                            .overlay(Text("Something Here"))
                         Divider()
                         RoundedRectangle(cornerRadius: 8)
+                            .foregroundColor(.clear)
                             .frame(width: geo.size.width ,height: geo.size.height/2)
+                            .overlay(Text("Something Here"))
                     }
                 }
-                //.position(x: X)
-                    //.frame(width: geo.frame(in: .local).maxX, height: geo.frame(in: .local).maxY)
             }
         }
-    }
-    
-    var section: some View{
-            Rectangle()
     }
 }
 
