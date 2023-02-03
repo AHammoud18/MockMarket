@@ -22,7 +22,11 @@ struct Chart: View{
     @AppStorage ("marketTime") var isMarketOpen = false
     let dateFormat = DateFormatter()
     let timeFormat = DateFormatter()
+    @State var range: Int
     
+    init(range: Int){
+        _range = State(initialValue: range)
+    }
     // creates an initializer asking for the ticker symbol and the range of the chart
     
     var body: some View{
@@ -36,8 +40,8 @@ struct Chart: View{
             LineChartView(
                 lineChartController:
                     LineChartController(
-                        prices: self.stockInfo.stockPrice[0],
-                        dates: self.stockInfo.stockDates[0],
+                        prices: self.stockInfo.stockPrice[self.range],
+                        dates: self.stockInfo.stockDates[self.range],
                         hours: self.stockInfo.stockDayTimes,
                         indicatorPointColor: self.pointPos.indicatorColor,
                         dragGesture: true

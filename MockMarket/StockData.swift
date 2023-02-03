@@ -12,10 +12,11 @@ import XCAStocksAPI
 @available(iOS 16.0, *)
 @MainActor class StockData: ObservableObject{
     static let data = StockData()
-    @Published var stockData: [[Indicator]] = [[]]  // matrix of indicators [0] = Day, [1] = week, [2] = month...etc...
+    @Published var chartRange: Int?
+    @Published var stockData: [[Indicator]] = [[], [], [], [], [], []]  // matrix of indicators [0] = Day, [1] = week, [2] = month...etc...
     @Published var stockTicker: [Quote] = []
-    @Published var stockPrice: [[Double]] = [[]] // matrix of Prices [0] = Day, [1] = week, [2] = month...etc...
-    @Published var stockDates: [[String]] = [[]] // matrix of Dates [0] = Day, [1] = week, [2] = month...etc...
+    @Published var stockPrice: [[Double]] = [[], [], [], [], [], []] // matrix of Prices [0] = Day, [1] = week, [2] = month...etc...
+    @Published var stockDates: [[String]] = [[], [], [], [], [], []] // matrix of Dates [0] = Day, [1] = week, [2] = month...etc...
     @Published var stockDayTimes: [String] = []
     @Published var ticker: String?
     @Published var range: ChartRange?
@@ -32,7 +33,18 @@ import XCAStocksAPI
     func grabStockInfo(){
         Task{
             let api = XCAStocksAPI()
-            self.stockData[0] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: self.range ?? .oneDay)!.indicators
+            // stock info for a day
+            self.stockData[0] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .oneDay)!.indicators
+            // stock info for a week
+            self.stockData[1] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .oneWeek)!.indicators
+            // stock info for a month
+            self.stockData[2] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .oneMonth)!.indicators
+            // 6 months
+            self.stockData[3] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .sixMonth)!.indicators
+            // one year
+            self.stockData[4] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .oneYear)!.indicators
+            // max
+            self.stockData[5] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .max)!.indicators
             loadPrices()
         }
     }
@@ -42,9 +54,9 @@ import XCAStocksAPI
     }
     
     func deintitStock(){
-        self.stockPrice = [[]]
+        self.stockPrice = [[], [], [], [], [], []]
         self.stockDayTimes.removeAll()
-        self.stockDates = [[]]
+        self.stockDates = [[], [], [], [], [], []]
         print("removed!")
     }
     
@@ -53,12 +65,13 @@ import XCAStocksAPI
     func loadPrices(){
         timeFormat.timeStyle = .short
         dateFormat.dateFormat = "yy-MM-dd"
-
-        // append all day values to the first index in the matrix
-        for i in 0..<self.stockData[0].count-1{
-            self.stockDates[0].insert(dateFormat.string(from: self.stockData[0][i].timestamp), at: i)
-            self.stockDayTimes.insert(timeFormat.string(from: self.stockData[0][i].timestamp), at: i)
-            self.stockPrice[0].insert(self.stockData[0][i].close, at: i)
+        for i in 0..<6{
+            // append all day values to the first index in the matrix (for day view)
+            for j in 0..<self.stockData[i].count-1{
+                self.stockDates[i].insert(dateFormat.string(from: self.stockData[i][j].timestamp), at: j)
+                self.stockDayTimes.insert(timeFormat.string(from: self.stockData[i][j].timestamp), at: j)
+                self.stockPrice[i].insert(self.stockData[i][j].close, at: j)
+            }
         }
         
     }

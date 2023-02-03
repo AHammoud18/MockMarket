@@ -86,8 +86,7 @@ struct LoadingScreen: View{
 
     var body: some View{
         ZStack{
-            GroupBox{
-                ProgressView("Loading Stocks...")
+            ProgressView("Loading \(self.stockInfo.stockTicker.last?.displayName ?? "Companie")'s Chart...")
                     .progressViewStyle(.circular)
                     .padding()
                     .onReceive(timer){ _ in
@@ -105,7 +104,6 @@ struct LoadingScreen: View{
                 if loadedStock == false{
                     loadStock()
                 }
-            }
         }.navigate(to: CompanyStockView(), when: $loadedStock)
     }
     
@@ -120,6 +118,8 @@ struct LoadingScreen: View{
 struct CompanyStockView: View{
     @StateObject var stockInfo = StockData.data
     @State private var selectedRange = 0
+    @State var chartRange = 0
+
     var body: some View{
         GeometryReader{ geo in
             let X = geo.frame(in: .local).midX
@@ -140,8 +140,15 @@ struct CompanyStockView: View{
                             .frame(height: 40)
                             .foregroundColor(.clear)
                         Divider()
-                        Chart()
-                            .frame(width: geo.size.width/1.2 ,height: geo.size.height/3.5)
+                        TabView(selection: $chartRange){
+                            ForEach(0..<6){ value in
+                                ZStack{
+                                    Chart(range: value.self)
+                                        .frame(width: geo.size.width/1.2 ,height: geo.size.height/3.5)
+                                }.tag(value.self)
+                            }
+                        }.tabViewStyle(.page)
+                            .frame(height: geo.size.height/2)
                         Divider()
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundColor(.clear)
