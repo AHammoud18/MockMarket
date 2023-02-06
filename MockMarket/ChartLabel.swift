@@ -1,6 +1,6 @@
 
 import SwiftUI
-//
+
 public struct ChartLabel: View {
     public var lineChartController: LineChartController
     @StateObject var pointPos = indicatorPos.data
