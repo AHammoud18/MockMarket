@@ -20,6 +20,7 @@
 		2757954E29913EEC001A7D52 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757954529913EEC001A7D52 /* LineView.swift */; };
 		2757954F29913EEC001A7D52 /* LinePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757954629913EEC001A7D52 /* LinePath.swift */; };
 		2757955029913EEC001A7D52 /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757954729913EEC001A7D52 /* LineChartView.swift */; };
+		70939538299143550064214B /* XCAStocksAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 70939537299143550064214B /* XCAStocksAPI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70939538299143550064214B /* XCAStocksAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +72,8 @@
 		2734034E298D5B3B0043967A /* MockMarket */ = {
 			isa = PBXGroup;
 			children = (
+				27340351298D5B3B0043967A /* ContentView.swift */,
+				2757954229913EEC001A7D52 /* MainPage.swift */,
 				2757953F29913EEC001A7D52 /* ChartLabel.swift */,
 				2757954429913EEC001A7D52 /* ChartView.swift */,
 				2757954029913EEC001A7D52 /* IndicatorPoint.swift */,
@@ -77,11 +81,9 @@
 				2757954729913EEC001A7D52 /* LineChartView.swift */,
 				2757954629913EEC001A7D52 /* LinePath.swift */,
 				2757954529913EEC001A7D52 /* LineView.swift */,
-				2757954229913EEC001A7D52 /* MainPage.swift */,
 				2757953E29913EEC001A7D52 /* MockMarket-Bridging-Header.h */,
 				2757954329913EEC001A7D52 /* StockData.swift */,
 				2734034F298D5B3B0043967A /* MockMarketApp.swift */,
-				27340351298D5B3B0043967A /* ContentView.swift */,
 				27340353298D5B3C0043967A /* Assets.xcassets */,
 				27340355298D5B3C0043967A /* Preview Content */,
 			);
@@ -112,6 +114,9 @@
 			dependencies = (
 			);
 			name = MockMarket;
+			packageProductDependencies = (
+				70939537299143550064214B /* XCAStocksAPI */,
+			);
 			productName = MockMarket;
 			productReference = 2734034C298D5B3B0043967A /* MockMarket.app */;
 			productType = "com.apple.product-type.application";
@@ -140,6 +145,9 @@
 				Base,
 			);
 			mainGroup = 27340343298D5B3B0043967A;
+			packageReferences = (
+				70939536299143550064214B /* XCRemoteSwiftPackageReference "XCAStocksAPI" */,
+			);
 			productRefGroup = 2734034D298D5B3B0043967A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -305,7 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MockMarket/Preview Content\"";
-				DEVELOPMENT_TEAM = 7CS95DRWJT;
+				DEVELOPMENT_TEAM = 6X6KX8WVK5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -334,7 +342,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MockMarket/Preview Content\"";
-				DEVELOPMENT_TEAM = 7CS95DRWJT;
+				DEVELOPMENT_TEAM = 6X6KX8WVK5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -377,6 +385,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		70939536299143550064214B /* XCRemoteSwiftPackageReference "XCAStocksAPI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alfianlosari/XCAStocksAPI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		70939537299143550064214B /* XCAStocksAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 70939536299143550064214B /* XCRemoteSwiftPackageReference "XCAStocksAPI" */;
+			productName = XCAStocksAPI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 27340344298D5B3B0043967A /* Project object */;
 }
