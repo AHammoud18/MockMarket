@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import XCAStocksAPI
 
+
+
 @available(iOS 16.0, *)
 @MainActor class StockData: ObservableObject{
     static let data = StockData()

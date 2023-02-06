@@ -7,7 +7,7 @@
 
 import SwiftUI
 import XCAStocksAPI
-
+//
 
 extension View {
     /// Navigate to a new view.
