@@ -46,7 +46,7 @@ struct Chart: View{
                         indicatorPointColor: self.pointPos.indicatorColor,
                         dragGesture: true
                     ))
-        }.groupBoxStyle(chartBoxStyle())
+        }.groupBoxStyle(ChartBox())
         .onReceive(timer){ _ in
             self.stockInfo.getTime()
     }

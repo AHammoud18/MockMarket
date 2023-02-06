@@ -68,7 +68,7 @@ struct StockPage: View{
                     )
                 }.frame(width: geo.frame(in: .global).maxX/1.2, height: geo.frame(in: .global).maxY/3)
                     .position(x: X, y: Y*1.4)
-                    .groupBoxStyle(chartBoxStyle())
+                    .groupBoxStyle(ChartBox())
             }
             .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
                 LoadingScreen()
@@ -85,6 +85,7 @@ struct LoadingScreen: View{
     @StateObject var stockInfo = StockData.data
 
     var body: some View{
+
         ZStack{
             ProgressView("Loading \(self.stockInfo.stockTicker.last?.displayName ?? "Companie")'s Chart...")
                     .progressViewStyle(.circular)
@@ -100,11 +101,13 @@ struct LoadingScreen: View{
                             loadedStock = true
                         }
                     }
-            }.onAppear{
+            }
+            .onAppear{
                 if loadedStock == false{
                     loadStock()
                 }
         }.navigate(to: CompanyStockView(), when: $loadedStock)
+        
     }
     
     func loadStock(){
@@ -117,8 +120,13 @@ struct LoadingScreen: View{
 @available(iOS 16.0, *)
 struct CompanyStockView: View{
     @StateObject var stockInfo = StockData.data
+    @StateObject var pointPos = indicatorPos.data
     @State private var selectedRange = 0
-    @State var chartRange = 0
+    @State private var chartRange = 0
+    @State private var isSelected = false
+    @State private var dateOpacity = false
+    @State var dateSelect: [String] = ["1D", "1W", "1M" ,"6M", "1Y", "All"]
+    
 
     var body: some View{
         GeometryReader{ geo in
@@ -126,13 +134,16 @@ struct CompanyStockView: View{
             let Y = geo.frame(in: .local).midY
             VStack(spacing: 1){
                 Text(self.stockInfo.ticker ?? "default")
+                    .foregroundColor(.black)
                     .font(Font.system(size: 20))
                     .bold()
                 Text(self.stockInfo.stockTicker.last?.displayName ?? "company")
+                    .foregroundColor(.black)
                 Divider()
                 ScrollView(showsIndicators: false){
                     VStack(spacing: 2){
                         Text("\(self.stockInfo.stockTicker.last?.regularMarketPrice ?? 0.0, specifier: "%0.2f" )")
+                            .foregroundColor(.black)
                             .bold()
                             .offset(y: 5)
                         Text("")
@@ -140,14 +151,43 @@ struct CompanyStockView: View{
                             .frame(height: 40)
                             .foregroundColor(.clear)
                         Divider()
+                        Divider()
+                            .foregroundColor(.clear)
+                            .frame(height: 1)
+                            .padding(EdgeInsets(top: 80, leading: 20, bottom: 0, trailing: 20))
+                            .overlay(
+                                ScrollView(.horizontal, showsIndicators: false){
+                                    HStack(alignment: .center, spacing: 2){
+                                        ForEach(0..<6){ value in
+                                            Button{
+                                                chartRange = value.self
+                                                isSelected = true
+                                            }label:{
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .foregroundColor(.gray)
+                                                    .overlay{ Text("\(dateSelect[value.self])")
+                                                        .foregroundColor(.white)
+                                                        .bold()
+                                                    }
+                                                
+                                            }.frame(width: 40,height: 40)
+                                                .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 8))
+                                                .tag(value.self)
+                                        }
+                                    }
+                                }
+
+                            )
                         TabView(selection: $chartRange){
                             ForEach(0..<6){ value in
                                 ZStack{
                                     Chart(range: value.self)
                                         .frame(width: geo.size.width/1.2 ,height: geo.size.height/3.5)
+                                        .gesture(DragGesture())
                                 }.tag(value.self)
                             }
-                        }.tabViewStyle(.page)
+                            
+                        }.tabViewStyle(.page(indexDisplayMode: .never))
                             .frame(height: geo.size.height/2)
                         Divider()
                         RoundedRectangle(cornerRadius: 8)
@@ -168,11 +208,12 @@ struct CompanyStockView: View{
 
 
 @available(iOS 16.0, *)
-struct chartBoxStyle: GroupBoxStyle{
+struct ChartBox: GroupBoxStyle{
     @StateObject var stockInfo = StockData.data
     @StateObject var pointPos = indicatorPos.data
 
     func makeBody(configuration: Configuration) -> some View {
+        
         GeometryReader{ geo in
             RoundedRectangle(cornerRadius: 12)
                 .foregroundColor(.white)
@@ -187,8 +228,9 @@ struct chartBoxStyle: GroupBoxStyle{
                         .shadow(color: pointPos.indicatorColor, radius: 2)
                         .clipped()
                 )
+                
                 .overlay(
-                    Text("9:30")
+                    Text("9:30")    
                         .position(x: .zero, y: geo.size.height * 1.05)
                         .font(Font.system(size: 8))
                 )
@@ -207,7 +249,23 @@ struct chartBoxStyle: GroupBoxStyle{
 
 
 
+
 /*
+ 
+ 
+ .overlay(
+     RoundedRectangle(cornerRadius: 8)
+         .frame(width: 40, height: 20)
+         .position(x: geo.size.width*1.06 ,y: self.pointPos.latestPrice)
+     // flip 180 degrees, chart does this for the line path
+         .rotationEffect(.degrees(180), anchor: .center)
+         .rotation3DEffect(.degrees(180), axis: (x: 0.0, y: 1.0, z: 0.0))
+         .overlay(
+             Text(String(self.stockInfo.stockPrice[self.pointPos.selectedRange].last!))
+         )
+ )
+ 
+ 
  GroupBox{
      LineChartView(
          lineChartController: LineChartController(
