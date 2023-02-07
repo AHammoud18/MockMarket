@@ -52,6 +52,7 @@ import XCAStocksAPI
     }
     
     func refreshStock(){
+        loadTicker()
         self.stockPrice[0].append(self.stockTicker.last!.regularMarketPrice!)
     }
     
@@ -65,15 +66,22 @@ import XCAStocksAPI
     
     // this function will append price data, date data and hour data from the "data" variable
     func loadPrices(){
+        debugPrint(self.stockData)
         timeFormat.timeStyle = .short
         dateFormat.dateFormat = "yy-MM-dd"
-        for i in 0..<6{
-            // append all day values to the first index in the matrix (for day view)
-            for j in 0..<self.stockData[i].count-1{
-                self.stockDates[i].insert(dateFormat.string(from: self.stockData[i][j].timestamp), at: j)
-                self.stockDayTimes.insert(timeFormat.string(from: self.stockData[i][j].timestamp), at: j)
-                self.stockPrice[i].insert(self.stockData[i][j].close, at: j)
+        
+        if self.stockData[0].count > 1{
+            for i in 0..<6{
+                
+                // append all day values to the first index in the matrix (for day view)
+                for j in 0..<self.stockData[i].count-1{
+                    self.stockDates[i].insert(dateFormat.string(from: self.stockData[i][j].timestamp), at: j)
+                    self.stockDayTimes.insert(timeFormat.string(from: self.stockData[i][j].timestamp), at: j)
+                    self.stockPrice[i].insert(self.stockData[i][j].close, at: j)
+                }
             }
+        }else{
+            print("Error! Not enough stock information")
         }
         
     }
