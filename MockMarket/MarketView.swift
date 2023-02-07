@@ -52,7 +52,7 @@ struct MarketView: View{
                 ForEach(tickerResults, id: \.self) { symbol in
                     Button{
                         self.stockInfo.ticker = self.dataSet.SP500[symbol]
-                        print("\(self.dataSet.SP500[symbol])")
+                        print("\(self.stockInfo.ticker)")
                         self.didSelectStock = true
                     }label:{
                         Text("\(symbol)").searchCompletion(symbol)

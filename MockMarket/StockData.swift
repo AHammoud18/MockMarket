@@ -22,6 +22,7 @@ import XCAStocksAPI
     @Published var stockDayTimes: [String] = []
     @Published var ticker: String?
     @Published var range: ChartRange?
+    @Published var isLoaded = false
     // variables below are for market time comparison
     let calendar = Calendar.current
     let now = Date()
@@ -47,7 +48,9 @@ import XCAStocksAPI
             self.stockData[4] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .oneYear)!.indicators
             // max
             self.stockData[5] = try await api.fetchChartData(tickerSymbol: self.ticker ?? "", range: .max)!.indicators
+            
             loadPrices()
+            
         }
     }
     
@@ -57,6 +60,9 @@ import XCAStocksAPI
     }
     
     func deintitStock(){
+        self.isLoaded = false
+        self.ticker = ""
+        self.stockData = [[], [], [], [], [], []]
         self.stockPrice = [[], [], [], [], [], []]
         self.stockDayTimes.removeAll()
         self.stockDates = [[], [], [], [], [], []]
@@ -66,11 +72,15 @@ import XCAStocksAPI
     
     // this function will append price data, date data and hour data from the "data" variable
     func loadPrices(){
-        debugPrint(self.stockData)
+        if !(self.stockData[0].isEmpty){
+            self.isLoaded = true
+            print("loaded")
+            
+        }
         timeFormat.timeStyle = .short
         dateFormat.dateFormat = "yy-MM-dd"
-        
-        if self.stockData[0].count > 1{
+
+        if !(self.stockData[0].isEmpty){
             for i in 0..<6{
                 
                 // append all day values to the first index in the matrix (for day view)
@@ -82,6 +92,8 @@ import XCAStocksAPI
             }
         }else{
             print("Error! Not enough stock information")
+            debugPrint(self.stockData[1].count)
+            debugPrint(self.stockData[0].count)
         }
         
     }

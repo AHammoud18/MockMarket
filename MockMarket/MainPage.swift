@@ -36,7 +36,7 @@ struct StockPage: View{
     @State var didSelectStock = false
     @State var selectedStock: String?
     let currentDate = DateFormatter()
-    let timer = Timer.publish(every: 10.00, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 50.00, on: .main, in: .common).autoconnect()
     let times = ["22-12-27", "23-01-27"]
     
     
@@ -92,22 +92,19 @@ struct LoadingScreen: View{
                     .progressViewStyle(.circular)
                     .padding()
                     .onReceive(timer){ _ in
-                        if progress <= 4 && loadedStock == false{
-                            progress += 4
+                        if self.stockInfo.isLoaded == true{
+                            print("TRUEEE")
+                            self.loadedStock = true
+                            
                         }
-                        else if progress >= 5{
-                            loadedStock = true
-                        }
-                        else{
-                            loadedStock = true
-                        }
+
                     }
             }
             .onAppear{
-                if loadedStock == false{
-                    loadStock()
-                }
-        }.navigate(to: CompanyStockView(), when: $loadedStock)
+                loadStock()
+            }
+            
+            .navigate(to: CompanyStockView(), when: $loadedStock)
         
     }
     
