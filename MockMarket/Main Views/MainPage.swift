@@ -28,6 +28,8 @@ struct StockPrices: Identifiable {
 
 @available(iOS 16.0, *)
 struct StockPage: View{
+    //@Environment(\.managedObjectContext) var mOC
+    //@FetchRequest(sortDescriptors: []) var isTutorialComplete: FetchedResults<Tutorial>
     @State var userValue = [14.50, 12.00, 18.25, 22.50, 8.00, 45.00]
     @State var userDates = ["23-1-11","23-1-13","23-1-14","23-1-16","23-1-20","23-1-22"]
     @State var priceColor = true
@@ -75,13 +77,13 @@ struct StockPage: View{
 //                Button{
 //                    self.stockInfo.ticker = "AAPL"
 //                    didSelectStock = true
-//                }label:{
+//                  }label:{
 //                    Text("Apple Stock")
 //                }
 //                Button{
 //                    self.stockInfo.ticker = "IBM"
 //                    didSelectStock = true
-//                }label:{
+//                  }label:{
 //                    Text("IBM Stock")
 //                }.offset(y: -20)
 //                Divider()
@@ -271,7 +273,17 @@ struct StockPage: View{
                         }
                         .position(x: geo.frame(in: .local).midX, y: geo.frame(in: .local).midY/9)
                         .padding((.bottom))
+                    
                     }
+                
+                    ///playing with coreData
+                    VStack(alignment: .center){
+                        Text("Test")
+                        //Text("Bool: \(isTutorialComplete.startIndex)")
+                            
+                    }
+                    .position(x: 200, y:600)
+                
                 }
             }
             .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){

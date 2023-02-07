@@ -41,7 +41,9 @@ struct ContentView: View {
     @State private var progress: Double = 0.0
     @State var loaded = false
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
+    
+    @Environment(\.managedObjectContext) var mOC
+    @FetchRequest(sortDescriptors: []) var isTutorialComplete: FetchedResults<Tutorial>
     // create a loading screen so that Yahoo Finance can send up the updated info
     var body: some View {
         ZStack {
