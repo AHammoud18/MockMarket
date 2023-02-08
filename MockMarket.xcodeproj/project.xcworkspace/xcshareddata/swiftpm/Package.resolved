@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "af1f7a2007d607fbe735c445f19080df4260fe8e"
+      }
+    },
+    {
+      "identity" : "xcastocksapi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/alfianlosari/XCAStocksAPI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "2b2116f70ac12727a8e17918ea3e94fd5687bd0e"
+      }
+    }
+  ],
+  "version" : 2
+}
