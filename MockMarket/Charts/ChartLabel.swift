@@ -12,20 +12,20 @@ public struct ChartLabel: View {
             Text("\(lineChartController.prices[indexPosition], specifier: "%.2f")")
                 .foregroundColor(lineChartController.labelColor)
                 .position(x: pointPos.pricePosition.x)
-                .offset(y: -20)
+                .offset(y: 20)
             HStack {
                 if let dates = lineChartController.dates {
                      let date = formatStringDate(dates[indexPosition])
                     Text(date)
                         .opacity(0.5)
-                        .offset(y: -100)
+                        .offset(y: -80)
                 }
                 
                 if let hours = lineChartController.hours {
                     let hour = hours[indexPosition]
                     Text(hour)
                         .opacity(0.5)
-                        .offset(y: -100)
+                        .offset(y: -80)
                 }
             }
         }

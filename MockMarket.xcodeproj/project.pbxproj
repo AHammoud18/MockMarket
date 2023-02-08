@@ -24,6 +24,8 @@
 		275795622993D553001A7D52 /* nasdaq-tickers.json in Resources */ = {isa = PBXBuildFile; fileRef = 275795602993D553001A7D52 /* nasdaq-tickers.json */; };
 		275795652993D59F001A7D52 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 275795642993D59F001A7D52 /* SwiftyJSON */; };
 		275795682993D5AF001A7D52 /* XCAStocksAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 275795672993D5AF001A7D52 /* XCAStocksAPI */; };
+		7022A2522993E5A20076E832 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7022A2512993E5A20076E832 /* DataController.swift */; };
+		7022A2552993E5CE0076E832 /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7022A2532993E5CE0076E832 /* CoreDataModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		2757954729913EEC001A7D52 /* LineChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		2757955F2993D553001A7D52 /* MarketView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarketView.swift; sourceTree = "<group>"; };
 		275795602993D553001A7D52 /* nasdaq-tickers.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "nasdaq-tickers.json"; sourceTree = "<group>"; };
+		7022A2512993E5A20076E832 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		7022A2542993E5CE0076E832 /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,18 +84,13 @@
 			children = (
 				2757955F2993D553001A7D52 /* MarketView.swift */,
 				275795602993D553001A7D52 /* nasdaq-tickers.json */,
-				2757953F29913EEC001A7D52 /* ChartLabel.swift */,
-				2757954429913EEC001A7D52 /* ChartView.swift */,
-				2757954029913EEC001A7D52 /* IndicatorPoint.swift */,
-				2757954129913EEC001A7D52 /* LineChartController.swift */,
-				2757954729913EEC001A7D52 /* LineChartView.swift */,
-				2757954629913EEC001A7D52 /* LinePath.swift */,
-				2757954529913EEC001A7D52 /* LineView.swift */,
 				2757954229913EEC001A7D52 /* MainPage.swift */,
 				2757953E29913EEC001A7D52 /* MockMarket-Bridging-Header.h */,
 				2757954329913EEC001A7D52 /* StockData.swift */,
 				2734034F298D5B3B0043967A /* MockMarketApp.swift */,
 				27340351298D5B3B0043967A /* ContentView.swift */,
+				7022A2572993E6AE0076E832 /* Charts */,
+				7022A2562993E6960076E832 /* Core Data */,
 				27340353298D5B3C0043967A /* Assets.xcassets */,
 				27340355298D5B3C0043967A /* Preview Content */,
 			);
@@ -104,6 +103,29 @@
 				27340356298D5B3C0043967A /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7022A2562993E6960076E832 /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				7022A2512993E5A20076E832 /* DataController.swift */,
+				7022A2532993E5CE0076E832 /* CoreDataModel.xcdatamodeld */,
+			);
+			path = "Core Data";
+			sourceTree = "<group>";
+		};
+		7022A2572993E6AE0076E832 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				2757953F29913EEC001A7D52 /* ChartLabel.swift */,
+				2757954429913EEC001A7D52 /* ChartView.swift */,
+				2757954029913EEC001A7D52 /* IndicatorPoint.swift */,
+				2757954129913EEC001A7D52 /* LineChartController.swift */,
+				2757954629913EEC001A7D52 /* LinePath.swift */,
+				2757954729913EEC001A7D52 /* LineChartView.swift */,
+				2757954529913EEC001A7D52 /* LineView.swift */,
+			);
+			path = Charts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,6 +218,8 @@
 				2757954F29913EEC001A7D52 /* LinePath.swift in Sources */,
 				2757954A29913EEC001A7D52 /* LineChartController.swift in Sources */,
 				2757954B29913EEC001A7D52 /* MainPage.swift in Sources */,
+				7022A2522993E5A20076E832 /* DataController.swift in Sources */,
+				7022A2552993E5CE0076E832 /* CoreDataModel.xcdatamodeld in Sources */,
 				2757954D29913EEC001A7D52 /* ChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -439,6 +463,19 @@
 			productName = XCAStocksAPI;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		7022A2532993E5CE0076E832 /* CoreDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7022A2542993E5CE0076E832 /* CoreDataModel.xcdatamodel */,
+			);
+			currentVersion = 7022A2542993E5CE0076E832 /* CoreDataModel.xcdatamodel */;
+			path = CoreDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 27340344298D5B3B0043967A /* Project object */;
 }
