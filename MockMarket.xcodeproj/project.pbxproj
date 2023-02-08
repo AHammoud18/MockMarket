@@ -20,6 +20,10 @@
 		2757954E29913EEC001A7D52 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757954529913EEC001A7D52 /* LineView.swift */; };
 		2757954F29913EEC001A7D52 /* LinePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757954629913EEC001A7D52 /* LinePath.swift */; };
 		2757955029913EEC001A7D52 /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757954729913EEC001A7D52 /* LineChartView.swift */; };
+		275795612993D553001A7D52 /* MarketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757955F2993D553001A7D52 /* MarketView.swift */; };
+		275795622993D553001A7D52 /* nasdaq-tickers.json in Resources */ = {isa = PBXBuildFile; fileRef = 275795602993D553001A7D52 /* nasdaq-tickers.json */; };
+		275795652993D59F001A7D52 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 275795642993D59F001A7D52 /* SwiftyJSON */; };
+		275795682993D5AF001A7D52 /* XCAStocksAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 275795672993D5AF001A7D52 /* XCAStocksAPI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,8 @@
 		2757954529913EEC001A7D52 /* LineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
 		2757954629913EEC001A7D52 /* LinePath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinePath.swift; sourceTree = "<group>"; };
 		2757954729913EEC001A7D52 /* LineChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
+		2757955F2993D553001A7D52 /* MarketView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarketView.swift; sourceTree = "<group>"; };
+		275795602993D553001A7D52 /* nasdaq-tickers.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "nasdaq-tickers.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +51,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				275795652993D59F001A7D52 /* SwiftyJSON in Frameworks */,
+				275795682993D5AF001A7D52 /* XCAStocksAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +78,8 @@
 		2734034E298D5B3B0043967A /* MockMarket */ = {
 			isa = PBXGroup;
 			children = (
+				2757955F2993D553001A7D52 /* MarketView.swift */,
+				275795602993D553001A7D52 /* nasdaq-tickers.json */,
 				2757953F29913EEC001A7D52 /* ChartLabel.swift */,
 				2757954429913EEC001A7D52 /* ChartView.swift */,
 				2757954029913EEC001A7D52 /* IndicatorPoint.swift */,
@@ -112,6 +122,10 @@
 			dependencies = (
 			);
 			name = MockMarket;
+			packageProductDependencies = (
+				275795642993D59F001A7D52 /* SwiftyJSON */,
+				275795672993D5AF001A7D52 /* XCAStocksAPI */,
+			);
 			productName = MockMarket;
 			productReference = 2734034C298D5B3B0043967A /* MockMarket.app */;
 			productType = "com.apple.product-type.application";
@@ -140,6 +154,10 @@
 				Base,
 			);
 			mainGroup = 27340343298D5B3B0043967A;
+			packageReferences = (
+				275795632993D59F001A7D52 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				275795662993D5AF001A7D52 /* XCRemoteSwiftPackageReference "XCAStocksAPI" */,
+			);
 			productRefGroup = 2734034D298D5B3B0043967A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -154,6 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				275795622993D553001A7D52 /* nasdaq-tickers.json in Resources */,
 				27340357298D5B3C0043967A /* Preview Assets.xcassets in Resources */,
 				27340354298D5B3C0043967A /* Assets.xcassets in Resources */,
 			);
@@ -168,6 +187,7 @@
 			files = (
 				27340352298D5B3B0043967A /* ContentView.swift in Sources */,
 				27340350298D5B3B0043967A /* MockMarketApp.swift in Sources */,
+				275795612993D553001A7D52 /* MarketView.swift in Sources */,
 				2757955029913EEC001A7D52 /* LineChartView.swift in Sources */,
 				2757954929913EEC001A7D52 /* IndicatorPoint.swift in Sources */,
 				2757954C29913EEC001A7D52 /* StockData.swift in Sources */,
@@ -233,7 +253,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -287,7 +307,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -313,6 +333,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -342,6 +363,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -377,6 +399,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		275795632993D59F001A7D52 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		275795662993D5AF001A7D52 /* XCRemoteSwiftPackageReference "XCAStocksAPI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alfianlosari/XCAStocksAPI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		275795642993D59F001A7D52 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 275795632993D59F001A7D52 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		275795672993D5AF001A7D52 /* XCAStocksAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 275795662993D5AF001A7D52 /* XCRemoteSwiftPackageReference "XCAStocksAPI" */;
+			productName = XCAStocksAPI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 27340344298D5B3B0043967A /* Project object */;
 }
