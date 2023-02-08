@@ -106,7 +106,7 @@ struct StockPage: View{
                                 )
                             )
                         }.frame(width: geo.frame(in: .global).maxX/1.2, height: geo.frame(in: .global).maxY/3)
-                            .position(x: X, y: Y/2.2)
+                            .position(x: geo.frame(in: .local).midX, y: geo.frame(in: .local).midY/2.2)
                         .groupBoxStyle(ChartBox())
                         
                         Text("Current: \(switchGraphTab())")
