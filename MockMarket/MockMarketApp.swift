@@ -10,11 +10,19 @@ import SwiftUI
 @available(iOS 16.0, *)
 @main
 struct MockMarket: App {
-    @StateObject private var dataController = DataController()
+    @AppStorage("isTutComplete") var isTutorialComplete = false
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, dataController.container.viewContext)
+            
+            if isTutorialComplete == true{
+                tutorialViews()
+            }else{
+                ContentView()
+            }
+            
+            //ContentView()
+
             //MarketView()
         }
     }

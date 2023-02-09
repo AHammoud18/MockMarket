@@ -28,8 +28,10 @@ struct StockPrices: Identifiable {
 
 @available(iOS 16.0, *)
 struct StockPage: View{
-    //@Environment(\.managedObjectContext) var mOC
-    //@FetchRequest(sortDescriptors: []) var isTutorialComplete: FetchedResults<Tutorial>
+//    @Environment(\.managedObjectContext) var mOC
+//    @FetchRequest(sortDescriptors: []) var results: FetchedResults<Tutorial>
+    
+   // let tutorialTest = Tutorial(context: mOC.)
     @State var userValue = [14.50, 12.00, 18.25, 22.50, 8.00, 45.00]
     @State var userDates = ["23-1-11","23-1-13","23-1-14","23-1-16","23-1-20","23-1-22"]
     @State var priceColor = true
@@ -279,6 +281,7 @@ struct StockPage: View{
                     ///playing with coreData
                     VStack(alignment: .center){
                         Text("Test")
+                                              
                         //Text("Bool: \(isTutorialComplete.startIndex)")
                             
                     }
