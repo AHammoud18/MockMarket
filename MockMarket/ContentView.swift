@@ -35,6 +35,14 @@ extension View {
     }
 }
 
+extension Color{
+    static let appColorWhite = Color("appColorWhite")
+    static let appColorBlack = Color("appColorBlack")
+}
+
+
+
+
 @available(iOS 16.0, *)
 struct ContentView: View {
     @StateObject private var tutorial = appStorage()
@@ -48,7 +56,8 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             GroupBox{
-                ProgressView("Loading Stocks...")
+                ProgressView("we should make this a splash screen eventually ;)")
+                    .multilineTextAlignment(.center)
                     .progressViewStyle(.circular)
                     .padding()
                     .onReceive(timer){ _ in
@@ -70,7 +79,7 @@ struct ContentView: View {
             //stockData.loadTicker()
             
         }
-        .navigate(to: StockPage(), when: $letLoadAndTutIsComplete)
+        .navigate(to: tabView(), when: $letLoadAndTutIsComplete)
         .navigate(to: tutorialViews(), when: $letLoadButTutIsntComplete)
     }
 }
