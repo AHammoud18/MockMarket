@@ -94,14 +94,20 @@ struct StockPage: View{
                         
                         ZStack {
                             portfolioChartView()
-                            VStack {
+                            VStack(alignment: .trailing) {
                                 Text("$\(totalWorth)")
                                     .font(.custom("American Typewriter", size: 40).bold())
-                                Text("+ %\(percentChange.formatted())")
-                                    .foregroundColor(.green)
-                                    .font(.system(size: 20))
+                                HStack {
+                                    Image(systemName: "triangle.fill")
+                                        .foregroundColor(.green)
+                                    Text(" %\(percentChange.formatted())")
+                                        .foregroundColor(.green)
+                                    .font(.system(size: 25))
+                                }
                                 
-                            }.offset(x:-110, y:-120)
+                            }.offset(x:-90, y:-100)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("Current Value: \(totalWorth), up \(percentChange.formatted())")
                                 
                         }
                         

@@ -69,6 +69,7 @@ struct portfolioSwitcherView: View {
                     }label:{
                         ZStack{
                             Text("1W")
+                                .accessibilityLabel("One Week")
                                 .font(.custom("American Typewriter", size: 17))
                                 .fontWeight((currentGraphTab == .oneWk) ? .bold : .none)
                                 .foregroundColor((currentGraphTab == .oneWk) ? .appColorWhite : .appColorBlack)
@@ -88,6 +89,7 @@ struct portfolioSwitcherView: View {
                     }label:{
                         ZStack{
                             Text("1M")
+                                .accessibilityLabel("One Month")
                                 .font(.custom("American Typewriter", size: 17))
                                 .fontWeight((currentGraphTab == .oneMo) ? .bold : .none)
                                 .foregroundColor((currentGraphTab == .oneMo) ? .appColorWhite : .appColorBlack)
@@ -106,6 +108,7 @@ struct portfolioSwitcherView: View {
                     }label:{
                         ZStack{
                             Text("6M")
+                                .accessibilityLabel("Six Months")
                                 .font(.custom("American Typewriter", size: 17))
                                 .fontWeight((currentGraphTab == .sixMo) ? .bold : .none)
                                 .foregroundColor((currentGraphTab == .sixMo) ? .appColorWhite : .appColorBlack)
@@ -124,6 +127,7 @@ struct portfolioSwitcherView: View {
                     }label:{
                         ZStack{
                             Text("1YR")
+                                .accessibilityLabel("One Year")
                                 .font(.custom("American Typewriter", size: 17))
                                 .fontWeight((currentGraphTab == .oneYr) ? .bold : .none)
                                 .foregroundColor((currentGraphTab == .oneYr) ? .appColorWhite : .appColorBlack)
@@ -142,6 +146,7 @@ struct portfolioSwitcherView: View {
                     }label:{
                         ZStack{
                             Text("All")
+                                .accessibilityLabel("All Time")
                                 .font(.custom("American Typewriter", size: 17))
                                 .fontWeight((currentGraphTab == .all) ? .bold : .none)
                                 .foregroundColor((currentGraphTab == .all) ? .appColorWhite : .appColorBlack)
