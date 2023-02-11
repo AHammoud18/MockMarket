@@ -13,9 +13,11 @@ import SwiftyJSON
 class Portfolio: ObservableObject{
     @Published var userData: [String : [Int : Double]] = [:]
     let appPath = Bundle.main.resourceURL
-    
+    let filePath = Bundle.main.path(forResource: "userPortfolio", ofType: ".json")
     func loadFile(){
-
+        let data = NSData(contentsOf: URL(filePath: filePath!))
+        let json = JSON(data)
+        debugPrint(json)
         //logic to read JSON file
         
     }
