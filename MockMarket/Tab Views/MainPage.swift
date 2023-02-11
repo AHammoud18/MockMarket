@@ -31,6 +31,8 @@ struct StockPage: View{
     @State var userValue = [14.50, 12.00, 18.25, 22.50, 8.00, 45.00]
     @State var userDates = ["23-1-11","23-1-13","23-1-14","23-1-16","23-1-20","23-1-22"]
     @State var priceColor = true
+    @State var totalWorth = 4000
+    @State var percentChange = 4.3
     @StateObject var stockInfo = StockData.data
     @StateObject var pointPos = indicatorPos.data
     @State var didSelectStock = false
@@ -39,39 +41,39 @@ struct StockPage: View{
     let timer = Timer.publish(every: 10.00, on: .main, in: .common).autoconnect()
     let times = ["22-12-27", "23-01-27"]
     
-    @State var currentGraphTab: dateGraphTab = .today
-    enum dateGraphTab{
-        case today
-        case oneWk
-        case oneMo
-        case sixMo
-        case oneYr
-        case all
-    }
-    
-    func switchGraphTab() -> String{
-        ///eventually change these to graphs not strings
-        switch self.currentGraphTab {
-        case .today:
-            return "Today"
-        case .oneWk:
-            return "OneWk"
-        case .oneMo:
-            return "OneMo"
-        case .sixMo:
-            return "YTD"
-        case .oneYr:
-            return "oneYR"
-        case .all:
-            return "all"
-        }
-        
-    }
+//    @State var currentGraphTab: dateGraphTab = .today
+//    enum dateGraphTab{
+//        case today
+//        case oneWk
+//        case oneMo
+//        case sixMo
+//        case oneYr
+//        case all
+//    }
+//
+//    func switchGraphTab() -> String{
+//        ///eventually change these to graphs not strings
+//        switch self.currentGraphTab {
+//        case .today:
+//            return "Today"
+//        case .oneWk:
+//            return "OneWk"
+//        case .oneMo:
+//            return "OneMo"
+//        case .sixMo:
+//            return "YTD"
+//        case .oneYr:
+//            return "oneYR"
+//        case .all:
+//            return "all"
+//        }
+//
+//    }
     
     
     @State private var isActive = false
     var body: some View{
-        VStack{
+        //VStack{
             GeometryReader { geo in
                 let X = geo.frame(in: .global).midX
                 let Y = geo.frame(in: .global).midY
@@ -84,180 +86,49 @@ struct StockPage: View{
                             Text("My Portfolio")
                                 .font(.custom("American Typewriter", size: 24).bold())
                                 .padding(.leading)
-                                
+                                .accessibilityLabel("My Portfolio")
+                            
                         }
+                        
                         .padding(.top)
                         
-                        ZStack(alignment: .center){
-                            VStack{
-                                GroupBox{
-                                    LineChartView(
-                                        lineChartController: LineChartController(
-                                            prices: self.userValue,
-                                            dates: self.userDates,
-                                            indicatorPointColor: self.pointPos.indicatorColor,
-                                            dragGesture: true
-                                        )
-                                    )
-                                }.groupBoxStyle(ChartBox())
-                            }
-                            
-                            Text("Current: \(switchGraphTab())")
-                        }.frame( height: geo.frame(in: .global).maxY/2.5)
-                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 30, trailing: 20))
-                        
-                        
+                        ZStack {
+                            portfolioChartView()
+                            VStack {
+                                Text("$\(totalWorth)")
+                                    .font(.custom("American Typewriter", size: 40).bold())
+                                Text("+ %\(percentChange.formatted())")
+                                    .foregroundColor(.green)
+                                    .font(.system(size: 20))
+                                
+                            }.offset(x:-110, y:-120)
+                                
+                        }
                         
                         ZStack{
-                            portfolioDateSwitcherView()
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack{
-                                    ///today
-                                    Button{
-                                        currentGraphTab = .today
-                                    }label:{
-                                        ZStack{
-                                            Text("Today")
-                                                .font(.custom("American Typewriter", size: 17))
-                                                .fontWeight((currentGraphTab == .today) ? .bold : .none)
-                                                .foregroundColor((currentGraphTab == .today) ? .appColorWhite : .appColorBlack)
-                                                .background{
-                                                    if currentGraphTab == .today{
-                                                        RoundedRectangle(cornerRadius: 20)
-                                                            .frame(width: 95, height: 50)
-                                                            .foregroundColor(.appColorBlack)
-                                                    }
-                                                }
-                                        }
-                                    }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
-                                    
-                                    
-
-                                    ///1W
-                                    Button{
-                                        currentGraphTab = .oneWk
-                                    }label:{
-                                        ZStack{
-                                            Text("1W")
-                                                .font(.custom("American Typewriter", size: 17))
-                                                .fontWeight((currentGraphTab == .oneWk) ? .bold : .none)
-                                                .foregroundColor((currentGraphTab == .oneWk) ? .appColorWhite : .appColorBlack)
-                                                .background{
-                                                    if currentGraphTab == .oneWk{
-                                                        RoundedRectangle(cornerRadius: 20)
-                                                            .frame(width: 70, height: 50)
-                                                            .foregroundColor(.appColorBlack)
-                                                    }
-                                                }
-                                        }
-                                    }.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 10))
-
-                                    ///1M
-                                    Button{
-                                        currentGraphTab = .oneMo
-                                    }label:{
-                                        ZStack{
-                                            Text("1M")
-                                                .font(.custom("American Typewriter", size: 17))
-                                                .fontWeight((currentGraphTab == .oneMo) ? .bold : .none)
-                                                .foregroundColor((currentGraphTab == .oneMo) ? .appColorWhite : .appColorBlack)
-                                                .background{
-                                                    if currentGraphTab == .oneMo{
-                                                        RoundedRectangle(cornerRadius: 20)
-                                                            .frame(width: 70, height: 50)
-                                                            .foregroundColor(.appColorBlack)
-                                                    }
-                                                }
-                                        }
-                                    }.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 10))
-                                    ///6M
-                                    Button{
-                                        currentGraphTab = .sixMo
-                                    }label:{
-                                        ZStack{
-                                            Text("6M")
-                                                .font(.custom("American Typewriter", size: 17))
-                                                .fontWeight((currentGraphTab == .sixMo) ? .bold : .none)
-                                                .foregroundColor((currentGraphTab == .sixMo) ? .appColorWhite : .appColorBlack)
-                                                .background{
-                                                    if currentGraphTab == .sixMo{
-                                                        RoundedRectangle(cornerRadius: 20)
-                                                            .frame(width: 70, height: 50)
-                                                            .foregroundColor(.appColorBlack)
-                                                    }
-                                                }
-                                        }
-                                    }.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 10))
-                                    ///1Yr
-                                    Button{
-                                        currentGraphTab = .oneYr
-                                    }label:{
-                                        ZStack{
-                                            Text("1YR")
-                                                .font(.custom("American Typewriter", size: 17))
-                                                .fontWeight((currentGraphTab == .oneYr) ? .bold : .none)
-                                                .foregroundColor((currentGraphTab == .oneYr) ? .appColorWhite : .appColorBlack)
-                                                .background{
-                                                    if currentGraphTab == .oneYr{
-                                                        RoundedRectangle(cornerRadius: 20)
-                                                            .frame(width: 70, height: 50)
-                                                            .foregroundColor(.appColorBlack)
-                                                    }
-                                                }
-                                        }
-                                    }.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 10))
-                                    ///All
-                                    Button{
-                                        currentGraphTab = .all
-                                    }label:{
-                                        ZStack{
-                                            Text("All")
-                                                .font(.custom("American Typewriter", size: 17))
-                                                .fontWeight((currentGraphTab == .all) ? .bold : .none)
-                                                .foregroundColor((currentGraphTab == .all) ? .appColorWhite : .appColorBlack)
-                                                .background{
-                                                    if currentGraphTab == .all{
-                                                        RoundedRectangle(cornerRadius: 20)
-                                                            .frame(width: 70, height: 50)
-                                                            .foregroundColor(.appColorBlack)
-                                                    }
-                                                }
-                                        }
-                                    }.padding(EdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0))
-                                    
-            
-                                }.frame(height: 50)
-                                    .dynamicTypeSize(.xxxLarge)
-                                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-                                
-                            }.frame(width: 350)
-
+                            portfolioSwitcherView()
                         }
                         .frame(height:75)
-                        .fixedSize(horizontal: false, vertical: true)
-                        
-                        
-                        
+                        //.fixedSize(horizontal: false, vertical: true)
                         
                         VStack{
                             HStack {
                                 Text("Current Holdings")
                                     .font(.custom("American Typewriter", size: 24).bold())
-                                .padding(.leading)
+                                    .padding(.leading)
+                                    .accessibilityLabel("Current Holdings")
                             }
-                                
+                            
                             
                             
                         }.padding(EdgeInsets(top: 50, leading: 0, bottom: 0, trailing: 0))
                     }
                 }
-
             }
-            .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
-                LoadingScreen()
-            }
-        }
-        
+//            .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
+//                LoadingScreen()
+//            }
+        //}
     }
 }
         
