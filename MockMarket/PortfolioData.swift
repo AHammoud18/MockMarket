@@ -18,9 +18,6 @@ class Portfolio: ObservableObject{
         let data = NSData(contentsOf: URL(filePath: filePath!))
         let json = JSON(data)
         debugPrint(json)
-        
-        
-        
         //logic to read JSON file
         
     }

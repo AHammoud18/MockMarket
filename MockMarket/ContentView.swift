@@ -35,20 +35,29 @@ extension View {
     }
 }
 
+extension Color{
+    static let appColorWhite = Color("appColorWhite")
+    static let appColorBlack = Color("appColorBlack")
+}
+
+
+
+
 @available(iOS 16.0, *)
 struct ContentView: View {
+    @StateObject private var tutorial = appStorage()
     @StateObject var stockData = StockData.data
     @State private var progress: Double = 0.0
-    @State var loaded = false
+    @State var letLoadAndTutIsComplete = false
+    @State var letLoadButTutIsntComplete = false
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
-    @Environment(\.managedObjectContext) var mOC
-    @FetchRequest(sortDescriptors: []) var isTutorialComplete: FetchedResults<Tutorial>
     // create a loading screen so that Yahoo Finance can send up the updated info
     var body: some View {
         ZStack {
             GroupBox{
-                ProgressView("Loading Stocks...")
+                ProgressView("we should make this a splash screen eventually ;)")
+                    .multilineTextAlignment(.center)
                     .progressViewStyle(.circular)
                     .padding()
                     .onReceive(timer){ _ in
@@ -56,7 +65,12 @@ struct ContentView: View {
                             progress += 4
                         }
                         else if progress >= 5{
-                            loaded = true
+                            if tutorial.isTutorialComplete == false{
+                                letLoadButTutIsntComplete = true
+                            }else{
+                                letLoadAndTutIsComplete = true
+                            }
+                            
                         }
                     }
             }
@@ -65,7 +79,8 @@ struct ContentView: View {
             //stockData.loadTicker()
             
         }
-        .navigate(to: StockPage(), when: $loaded)
+        .navigate(to: tabView(), when: $letLoadAndTutIsComplete)
+        .navigate(to: tutorialViews(), when: $letLoadButTutIsntComplete)
     }
 }
 
