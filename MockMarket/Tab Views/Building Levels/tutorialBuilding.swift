@@ -21,6 +21,7 @@ struct tutorialBuilding: View{
                     }label:{
                         Image(systemName: "map.circle")
                             .font(.system(size: 50))
+                            .accessibilityLabel("City Map")
                     }.position(x: geo.frame(in: .global).maxX - 60, y: geo.frame(in: .global).minY)
                         
                     ZStack {
