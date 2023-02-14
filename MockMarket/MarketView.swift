@@ -35,16 +35,25 @@ class tickerDocument: ObservableObject{
 }
 
 
-
 struct MarketView: View{
     @StateObject var stockInfo = StockData.data
     @StateObject var pointPos = indicatorPos.data
     @StateObject var dataSet = tickerDocument.data
+    @StateObject var userData = Portfolio.data
     @State private var test: [String] = []
     @State private var searchAppear = false
     @State private var didSelectStock = false
     let empty: [String] = []
     @State private var searchTicker: String = ""
+    @State private var tempTicker: String = ""
+    @State private var tempShares: Int = 0
+    @State private var tempBoughtPrice: Double = 0.0
+    
+    let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
     
     var body: some View{
         NavigationStack{
@@ -57,13 +66,47 @@ struct MarketView: View{
                         Text("\(symbol)").searchCompletion(symbol)
                     }
                 }
-            }//.opacity(self.searchAppear ? 0.0 : 1.0)
+            }
+            .overlay(
+                GeometryReader{ geo in
+                    VStack(spacing: 1){
+                        Section{
+                            TextField("Ticker", text: $tempTicker)
+                            TextField("Shares", value: $tempShares, formatter: formatter)
+                            TextField("Bought Pirce", value: $tempBoughtPrice, formatter: formatter)
+                        } header: {
+                            Text("Enter Stock Purchase")
+                        }.padding()
+                        Button{
+                            self.userData.displayFile()
+                        }label: {
+                            Text("Display Json")
+                        }
+                        Button{
+                            self.userData.appendData(ticker: self.tempTicker, shares: self.tempShares, boughtPrice: self.tempBoughtPrice)
+                            self.userData.writeFile()
+                        }label: {
+                            Text("Write File")
+                        }
+                        Button{
+                            self.userData.emptyFile()
+                        }label: {
+                            Text("Delete File")
+                        }
+                    }
+                }
+                
+            )
+            //.opacity(self.searchAppear ? 0.0 : 1.0)
         }.searchable(text: $searchTicker)
             .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
-                LoadingScreen()
+               LoadingScreen()
             }
             .onAppear{
-                self.dataSet.loadFile()
+                
+                self.userData.loadFile()
+                //self.userData.writeFile()
+                //self.dataSet.loadFile()
             }
         
     }
