@@ -13,7 +13,7 @@ class tickerDocument: ObservableObject{
     
     static let data = tickerDocument()
     private var json: JSON = []
-    @Published var SP500: [String : String] = [:]
+    @Published var Nasdaq: [String : String] = [:]
     
     func loadFile(){
         if let path = Bundle.main.path(forResource: "nasdaq-tickers", ofType: "json"){
@@ -22,7 +22,7 @@ class tickerDocument: ObservableObject{
                 self.json = JSON(jsonPath!)
                 for i in 0..<json.indices.count{
                     for _ in json[i]{
-                        self.SP500.updateValue( json[i]["Symbol"].stringValue, forKey: json[i]["Company Name"].stringValue)
+                        self.Nasdaq.updateValue( json[i]["Symbol"].stringValue, forKey: json[i]["Company Name"].stringValue)
                     }
                 }
                 //self.data = self.json!["Company Name"].arrayValue.map{$0.string!}
@@ -60,7 +60,7 @@ struct MarketView: View{
             List{
                 ForEach(tickerResults, id: \.self) { symbol in
                     Button{
-                        self.stockInfo.ticker = self.dataSet.SP500[symbol]
+                        self.stockInfo.ticker = self.dataSet.Nasdaq[symbol]
                         self.didSelectStock = true
                     }label:{
                         Text("\(symbol)").searchCompletion(symbol)
@@ -94,6 +94,12 @@ struct MarketView: View{
                             Text("Delete File")
                         }
                     }
+                    ZStack{
+                        //Text("User Tickers: \(self.userData.userPortfolio.keys.joined(separator: "-")) ").bold()
+                            //.position(x: geo.frame(in: .global).midX , y: geo.frame(in: .global).midY)
+                        Text("\(self.userData.userData?[0][1].rawString() ?? "JSON Here")")
+                            .position(x: geo.frame(in: .global).midX , y: geo.frame(in: .global).midY)
+                    }
                 }
                 
             )
@@ -104,7 +110,7 @@ struct MarketView: View{
             }
             .onAppear{
                 
-                self.userData.loadFile()
+                self.userData.checkFile()
                 //self.userData.writeFile()
                 //self.dataSet.loadFile()
             }
@@ -116,7 +122,7 @@ struct MarketView: View{
             return empty
         }
         else{
-            return self.dataSet.SP500.keys.filter{ $0.contains(searchTicker) }
+            return self.dataSet.Nasdaq.keys.filter{ $0.contains(searchTicker) }
         }
     }
     
