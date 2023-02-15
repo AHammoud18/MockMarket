@@ -48,7 +48,6 @@ struct tutorialBuilding: View{
                 ZStack{
                     ZStack {
                         
-                        
                         // MARK: | Light Mode Variation |
                         if colorScheme == .light{
                             ZStack {
@@ -65,6 +64,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 1
                                             Button{
                                                 toLevel1 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 1, checkLevel: a.level1Comp, checkUnlocked: true)
                                             }.offset(x: -60, y:50)
@@ -74,6 +74,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 2
                                             Button{
                                                 toLevel2 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 2, checkLevel: a.level2Comp, checkUnlocked: a.level2Unlocked)
                                             }.offset(x: 30, y:50)
@@ -82,6 +83,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 3
                                             Button{
                                                 toLevel3 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 3, checkLevel: a.level3Comp, checkUnlocked: a.level3Unlocked)
                                             }.offset(x: 115, y:50)
@@ -91,6 +93,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 4
                                             Button{
                                                 toLevel4 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 4, checkLevel: a.level4Comp, checkUnlocked: a.level4Unlocked)
                                             }.offset(x: -60, y: -100)
@@ -100,6 +103,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 5
                                             Button{
                                                toLevel5 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 5, checkLevel: a.level5Comp, checkUnlocked: a.level5Unlocked)
                                             }.offset(x: 30, y:-100)
@@ -109,6 +113,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 6
                                             Button{
                                                 toLevel6 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 6, checkLevel: a.level6Comp, checkUnlocked: a.level6Unlocked)
                                             }.offset(x: 115, y:-100)
@@ -147,6 +152,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 1
                                             Button{
                                                 toLevel1 = true
+                                                a.backToBuilding = false
                                                 
                                             }label:{
                                                 tutorialButtonBackground(level: 1, checkLevel: a.level1Comp, checkUnlocked: true)
@@ -157,6 +163,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 2
                                             Button{
                                                 toLevel2 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 2, checkLevel: a.level2Comp, checkUnlocked: a.level2Unlocked)
                                             }.offset(x: 30, y:50)
@@ -165,6 +172,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 3
                                             Button{
                                                 toLevel3 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 3, checkLevel: a.level3Comp, checkUnlocked: a.level3Unlocked)
                                             }.offset(x: 115, y:50)
@@ -174,6 +182,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 4
                                             Button{
                                                 toLevel4 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 4, checkLevel: a.level4Comp, checkUnlocked: a.level4Unlocked)
                                             }.offset(x: -60, y: -100)
@@ -183,6 +192,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 5
                                             Button{
                                                 toLevel5 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 5, checkLevel: a.level5Comp, checkUnlocked: a.level5Unlocked)
                                             }.offset(x: 30, y:-100)
@@ -192,6 +202,7 @@ struct tutorialBuilding: View{
                                             //MARK: Level 6
                                             Button{
                                                 toLevel6 = true
+                                                a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 6, checkLevel: a.level6Comp, checkUnlocked: a.level6Unlocked)
                                             }.offset(x: 115, y:-100)
@@ -208,126 +219,175 @@ struct tutorialBuilding: View{
                     
                     }.edgesIgnoringSafeArea(.top)
                     
-                    Button{
-                        toWorldMap = true
-                    }label:{
-                        Image(systemName: "map.circle")
-                            .font(.system(size: 50))
-                            .foregroundColor(Color(uiColor: .lightGray))
-                            .accessibilityLabel("City Map")
-                            .background{
-                                Circle()
-                                    .foregroundColor(.black)
-                                    .blur(radius: 10)
-                            }
-                    }.position(x: geo.frame(in: .global).maxX - 60, y: geo.frame(in: .global).minY)
+                    if a.isTutorialComplete == false && a.level1Comp == true && a.tutorialPopup == true{
+                        Button{
+                            a.isTutorialComplete = true
+                            a.tutorialPopup = false
+                        }label:{
+                            Text("Congratulations, you completed our tutorial, continue to learn, and explore the world of stocks, along with our education section, check our our paper-trading portfolio and news sections\nWelcome to the world of Stocks\n(Click this text to continue)")
+                                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                                .background{
+                                    rectangleBackground(width: geo.size.width-20 , height: geo.size.height/4, radiusOfCorners: 10)
+                                }
+                        }
+                    }
+                    
+                    if a.isTutorialComplete == true{
+                        Button{
+                            toWorldMap = true
+                            a.fromMap = true
+                        }label:{
+                            Image(systemName: "map.circle")
+                                .font(.system(size: 50))
+                                .foregroundColor(Color(uiColor: .lightGray))
+                                .accessibilityLabel("City Map")
+                                .background{
+                                    Circle()
+                                        .foregroundColor(.black)
+                                        .blur(radius: 10)
+                                }
+                        }.position(x: geo.frame(in: .global).maxX - 60, y: geo.frame(in: .global).minY)
+                    }
                 }//.ignoresSafeArea(.container)
                    // .edgesIgnoringSafeArea(.top)
             }
-            .navigate(to: educationView(), when: $toWorldMap)
-            .navigate(to: tutorialLevel1(), when: $toLevel1)
-            .navigate(to: tutorialLevel2(), when: $toLevel2)
-            .navigate(to: tutorialLevel3(), when: $toLevel3)
-            .navigate(to: tutorialLevel4(), when: $toLevel4)
-            .navigate(to: tutorialLevel5(), when: $toLevel5)
-            .navigate(to: tutorialLevel6(), when: $toLevel6)
+            //.navigate(to: tutorialBuilding(), when: $toTutorialBuilding)
+            .fullScreenCover(isPresented: $toWorldMap){
+                educationView()
+            }
+            .fullScreenCover(isPresented: $toLevel1){
+                tutorialLevel1()
+            }
+            .fullScreenCover(isPresented: $toLevel2){
+                tutorialLevel2()
+            }
+            .fullScreenCover(isPresented: $toLevel3){
+                tutorialLevel3()
+            }
+            .fullScreenCover(isPresented: $toLevel4){
+                tutorialLevel4()
+            }
+            .fullScreenCover(isPresented: $toLevel5){
+                tutorialLevel5()
+            }
+            .fullScreenCover(isPresented: $toLevel6){
+                tutorialLevel6()
+            }
         }
     }
 }
 
+
+
+
+
 struct tutorialLevel1: View{
     @StateObject private var a = appStorage()
-    @State var backToBuilding = false
+    @State var continueTutorial = false
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View{
         VStack {
             Text("level1")
             Button{
-                backToBuilding = true
                 a.level1Comp = true
                 a.level2Unlocked = true
+                if a.isTutorialComplete{
+                    dismiss()
+                }else{
+                    continueTutorial = true
+                }
+                //dismiss()
             }label:{
                 Text("Complete")
             }
-        }.navigate(to: tutorialBuilding(), when: $backToBuilding)
+        }.navigate(to: tabView(selectedTab: 2), when: $continueTutorial)
     }
 }
 struct tutorialLevel2: View{
     @StateObject private var a = appStorage()
-    @State var backToBuilding = false
+    @Environment(\.dismiss) var dismiss
     var body: some View{
         VStack {
             Text("level2")
             Button{
-                backToBuilding = true
+                a.backToBuilding = true
                 a.level2Comp = true
                 a.level3Unlocked = true
+                dismiss()
             }label:{
                 Text("Complete")
             }
-        }.navigate(to: tutorialBuilding(), when: $backToBuilding)
+        }//.navigate(to: tutorialBuilding(), when: $a.backToBuilding)
     }
 }
 struct tutorialLevel3: View{
     @StateObject private var a = appStorage()
-    @State var backToBuilding = false
+    @Environment(\.dismiss) var dismiss
     var body: some View{
         VStack {
             Text("level3")
             Button{
-                backToBuilding = true
+                a.backToBuilding = true
                 a.level3Comp = true
                 a.level4Unlocked = true
+                dismiss()
             }label:{
                 Text("Complete")
             }
-        }.navigate(to: tutorialBuilding(), when: $backToBuilding)
+        }//.navigate(to: tutorialBuilding(), when: $a.backToBuilding)
     }
 }
 struct tutorialLevel4: View{
     @StateObject private var a = appStorage()
-    @State var backToBuilding = false
+    @Environment(\.dismiss) var dismiss
     var body: some View{
         VStack {
             Text("level4")
             Button{
-                backToBuilding = true
+                a.backToBuilding = true
                 a.level4Comp = true
                 a.level5Unlocked = true
+                dismiss()
             }label:{
                 Text("Complete")
             }
-        }.navigate(to: tutorialBuilding(), when: $backToBuilding)
+        }//.navigate(to: tutorialBuilding(), when: $a.backToBuilding)
     }
 }
 struct tutorialLevel5: View{
     @StateObject private var a = appStorage()
-    @State var backToBuilding = false
+    @Environment(\.dismiss) var dismiss
+
     var body: some View{
         VStack {
             Text("level5")
             Button{
-                backToBuilding = true
+                
+                a.backToBuilding = true
                 a.level5Comp = true
                 a.level6Unlocked = true
+                dismiss()
             }label:{
                 Text("Complete")
             }
-        }.navigate(to: tutorialBuilding(), when: $backToBuilding)
+        }.navigate(to: tutorialBuilding(), when: $a.backToBuilding)
     }
 }
 struct tutorialLevel6: View{
     @StateObject private var a = appStorage()
-    @State var backToBuilding = false
+    @Environment(\.dismiss) var dismiss
     var body: some View{
         VStack {
             Text("level6")
             Button{
-                backToBuilding = true
+                a.backToBuilding = true
                 a.level6Comp = true
+                dismiss()
             }label:{
                 Text("Complete")
             }
-        }.navigate(to: tutorialBuilding(), when: $backToBuilding)
+        }.navigate(to: tutorialBuilding(), when: $a.backToBuilding)
     }
 }
 
