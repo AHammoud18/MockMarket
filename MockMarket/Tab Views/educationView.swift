@@ -27,6 +27,7 @@ struct educationView: View {
         .navigate(to: tutorialBuilding(), when: $toTutorialBuilding)
         
         
+        
     }
 }
 

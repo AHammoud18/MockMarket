@@ -31,7 +31,7 @@ struct StockPage: View{
     @State var userValue = [14.50, 12.00, 18.25, 22.50, 8.00, 45.00]
     @State var userDates = ["23-1-11","23-1-13","23-1-14","23-1-16","23-1-20","23-1-22"]
     @State var priceColor = true
-    @State var totalWorth = 4000
+    @State var totalWorth = 400
     @State var percentChange = 4.3
     @StateObject var stockInfo = StockData.data
     @StateObject var pointPos = indicatorPos.data
@@ -75,8 +75,8 @@ struct StockPage: View{
     var body: some View{
         //VStack{
             GeometryReader { geo in
-                let X = geo.frame(in: .global).midX
-                let Y = geo.frame(in: .global).midY
+                //let X = geo.frame(in: .global).midX
+                //let Y = geo.frame(in: .global).midY
                 
                 
                 //MARK: Portfolio Top Graph
@@ -94,20 +94,23 @@ struct StockPage: View{
                         
                         ZStack {
                             portfolioChartView()
-                            VStack(alignment: .trailing) {
+                            VStack(alignment: .leading) {
                                 Text("$\(totalWorth)")
                                     .font(.custom("American Typewriter", size: 40).bold())
+                                    .dynamicTypeSize(.xxxLarge)
                                 HStack {
                                     Image(systemName: "triangle.fill")
                                         .foregroundColor(.green)
                                     Text(" %\(percentChange.formatted())")
                                         .foregroundColor(.green)
                                     .font(.system(size: 25))
-                                }
+                                }.dynamicTypeSize(.xxxLarge)
                                 
-                            }.offset(x:-90, y:-100)
+                            }
+                            .position(x: geo.frame(in: .local).minX/2, y: geo.frame(in: .local).minY)
                                 .accessibilityElement(children: .combine)
-                                .accessibilityLabel("Current Value: \(totalWorth), up \(percentChange.formatted())")
+                                .accessibilityLabel("Current Value: \(totalWorth) dollars, up \(percentChange.formatted()) percent")
+                                .fixedSize()
                                 
                         }
                         
