@@ -12,7 +12,10 @@ class appStorage: ObservableObject{
     @AppStorage("isTutComplete") var isTutorialComplete = false
     
     // MARK: Tutorial Building
-    
+    @AppStorage("tutorialPopup") var tutorialPopup = true
+    @AppStorage("tutorialEnd") var tutorialEnd = false
+    @AppStorage("backToBuilding") var backToBuilding = false
+    @AppStorage("mapButton") var fromMap = false
     //completed
     @AppStorage("level1Comp") var level1Comp = false
     @AppStorage("level2Comp") var level2Comp = false
