@@ -67,7 +67,10 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 1, checkLevel: a.level1Comp, checkUnlocked: true)
-                                            }.offset(x: -60, y:50)
+                                                    .dynamicTypeSize(.xxLarge)
+                                            }
+                                            
+                                            .offset(x: -60, y:50)
                                                 .disabled(false)
                                             
                                             
@@ -77,6 +80,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 2, checkLevel: a.level2Comp, checkUnlocked: a.level2Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 30, y:50)
                                                 .disabled(!a.level2Unlocked)
 
@@ -86,6 +90,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 3, checkLevel: a.level3Comp, checkUnlocked: a.level3Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 115, y:50)
                                                 .disabled(!a.level3Unlocked)
                                             
@@ -96,6 +101,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 4, checkLevel: a.level4Comp, checkUnlocked: a.level4Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: -60, y: -100)
                                                 .disabled(!a.level4Unlocked)
                                             
@@ -106,6 +112,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 5, checkLevel: a.level5Comp, checkUnlocked: a.level5Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 30, y:-100)
                                                 .disabled(!a.level5Unlocked)
                                             
@@ -116,6 +123,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 6, checkLevel: a.level6Comp, checkUnlocked: a.level6Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 115, y:-100)
                                                 .disabled(!a.level6Unlocked)
                                         }
@@ -156,6 +164,7 @@ struct tutorialBuilding: View{
                                                 
                                             }label:{
                                                 tutorialButtonBackground(level: 1, checkLevel: a.level1Comp, checkUnlocked: true)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: -60, y:50)
                                                 .disabled(false)
                                             
@@ -166,6 +175,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 2, checkLevel: a.level2Comp, checkUnlocked: a.level2Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 30, y:50)
                                                 .disabled(!a.level2Unlocked)
 
@@ -175,6 +185,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 3, checkLevel: a.level3Comp, checkUnlocked: a.level3Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 115, y:50)
                                                 .disabled(!a.level3Unlocked)
                                             
@@ -185,6 +196,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 4, checkLevel: a.level4Comp, checkUnlocked: a.level4Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: -60, y: -100)
                                                 .disabled(!a.level4Unlocked)
                                             
@@ -195,6 +207,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 5, checkLevel: a.level5Comp, checkUnlocked: a.level5Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 30, y:-100)
                                                 .disabled(!a.level5Unlocked)
                                             
@@ -205,6 +218,7 @@ struct tutorialBuilding: View{
                                                 a.backToBuilding = false
                                             }label:{
                                                 tutorialButtonBackground(level: 6, checkLevel: a.level6Comp, checkUnlocked: a.level6Unlocked)
+                                                    .dynamicTypeSize(.xxLarge)
                                             }.offset(x: 115, y:-100)
                                                 .disabled(!a.level6Unlocked)
                                         }
@@ -253,7 +267,7 @@ struct tutorialBuilding: View{
             }
             //.navigate(to: tutorialBuilding(), when: $toTutorialBuilding)
             .fullScreenCover(isPresented: $toWorldMap){
-                educationView()
+                tabView(selectedTab: 2)
             }
             .fullScreenCover(isPresented: $toLevel1){
                 tutorialLevel1()
