@@ -42,7 +42,6 @@ extension Color{
 
 
 
-
 @available(iOS 16.0, *)
 struct ContentView: View {
     @StateObject private var tutorial = appStorage()
@@ -56,7 +55,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             GroupBox{
-                ProgressView("we should make this a splash screen eventually ;)")
+                ProgressView("Loading Data")
                     .multilineTextAlignment(.center)
                     .progressViewStyle(.circular)
                     .padding()
@@ -81,6 +80,35 @@ struct ContentView: View {
         }
         .navigate(to: tabView(), when: $letLoadAndTutIsComplete)
         .navigate(to: tutorialViews(), when: $letLoadButTutIsntComplete)
+    }
+}
+
+
+struct rectangleBackground: View{
+    var width: CGFloat
+    var height: CGFloat
+    var radiusOfCorners: CGFloat
+    
+    var body: some View{
+        ZStack{
+            RoundedRectangle(cornerRadius: radiusOfCorners)
+                .foregroundColor(.appColorWhite)
+                .background(RoundedRectangle(cornerRadius: radiusOfCorners).foregroundColor(.appColorWhite))
+                .background(
+                    RoundedRectangle(cornerRadius: radiusOfCorners)
+                        .foregroundColor(.appColorBlack)
+                        .frame(width: width * 1.02, height: height * 1.02)
+                        .offset(x: 8, y: 8)
+                )
+                .frame(width: width, height: height)
+                .overlay(
+                    RoundedRectangle(cornerRadius: radiusOfCorners)
+                        .stroke(style: StrokeStyle(lineWidth: 4))
+                        .foregroundColor(.appColorBlack)
+                        
+                )
+            
+        }
     }
 }
 

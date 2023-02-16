@@ -35,6 +35,11 @@ struct StockPage: View{
     @State var percentChange = 4.3
     @StateObject var stockInfo = StockData.data
     @StateObject var pointPos = indicatorPos.data
+    @StateObject var portfolio = Portfolio.data
+    @State var userShares: [Int] = []
+    @State var userBP: [Double] = []
+    @State var userTickers: [String] = []
+    @State var collectedResults: [Double] = []
     @State var didSelectStock = false
     @State var selectedStock: String?
     let currentDate = DateFormatter()
@@ -138,6 +143,53 @@ struct StockPage: View{
 //                LoadingScreen()
 //            }
         //}
+            .onReceive(timer){ _ in
+                if self.portfolio.purchasedShare == true{
+                    Task{
+                        valueCalc()
+                    }
+                }
+                
+            }
+            .onAppear{
+                self.portfolio.checkFile()
+                //self.userData.writeFile()
+                if self.portfolio.purchasedShare == true{
+                    self.getUserValue()
+                }
+                
+            }
+    }
+    func getUserValue(){
+        for (tickers, values) in self.portfolio.userPortfolio{
+            self.userTickers.append(tickers)
+            for (shares, bought_price) in values{
+                print("shares: \(shares) bought: \(bought_price)")
+                self.userBP.append(bought_price)
+                self.userShares.append(shares)
+                //self.userValue = self.stockData.stockTicker.last?.regularMarketPrice Double(shares) * bought_price
+                print("User Bought Prices: \(self.userBP)")
+                print("User Shares: \(self.userShares)")
+                print("User Tickers: \(self.userTickers)")
+            }
+        }
+    }
+    
+    
+    // calculate user gain/loss after purhcase of stock
+    func valueCalc(){
+        self.collectedResults = []
+        self.portfolio.userValue = 0.0
+        for i in 0..<self.userTickers.count{
+            self.stockInfo.loadTickerforUser(ticker: self.userTickers[i])
+            print(self.stockInfo.result)
+            self.collectedResults.insert(((max(self.stockInfo.result, self.userBP[i]) - min(self.stockInfo.result, self.userBP[i]))) * Double(self.userShares[i]), at: i)
+        }
+        print(self.userShares)
+        print(self.collectedResults)
+        for i in 0..<collectedResults.count{
+            self.portfolio.userValue += collectedResults[i]
+        }
     }
 }
         
@@ -187,13 +239,21 @@ struct LoadingScreen: View{
 struct CompanyStockView: View{
     @StateObject var stockInfo = StockData.data
     @StateObject var pointPos = indicatorPos.data
+    @StateObject var userData = Portfolio.data
     @State private var selectedRange = 0
     @State private var chartRange = 0
     @State private var isSelected = false
     @State private var dateOpacity = false
     @State var dateSelect: [String] = ["1D", "1W", "1M" ,"6M", "1Y", "All"]
+    @State var showPurchasePage = false
+    @State var shares: Int = 0
+    // formatter for a number pad
+    let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
     
-
     var body: some View{
         GeometryReader{ geo in
             let X = geo.frame(in: .local).midX
@@ -259,18 +319,87 @@ struct CompanyStockView: View{
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundColor(.clear)
                             .frame(width: geo.size.width ,height: geo.size.height/2)
-                            .overlay(Text("Something Here"))
+                            .overlay(
+                                HStack{
+                                    Button{
+                                        showPurchasePage.toggle()
+                                    }label: {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .foregroundColor(.accentColor)
+                                            .frame(width: 100, height: 40)
+                                            .overlay(
+                                                Text("Buy")
+                                                    .foregroundColor(.white)
+                                                    .bold()
+                                            )
+                                        
+                                    }
+                                    Button{
+                                        showPurchasePage.toggle()
+                                    }label:{
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .foregroundColor(.pink)
+                                            .frame(width: 100, height: 40)
+                                            .overlay(
+                                                Text("Sell")
+                                                    .bold()
+                                                    .foregroundColor(.white)
+                                            )
+                                    }
+                                }
+                                
+                            )
                         Divider()
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundColor(.clear)
                             .frame(width: geo.size.width ,height: geo.size.height/2)
                             .overlay(Text("Something Here"))
                     }
-                }
+                } // Scroll View
+            } // Vstack
+            .sheet(isPresented: $showPurchasePage){
+                purchasePage
+            }// PurchasePage View
+        } // Geo Reader
+    } // Body View
+    
+    var purchasePage : some View{
+        GeometryReader{ geo in
+            let X = geo.frame(in: .global).midX
+            let Y = geo.frame(in: .global).midY
+            
+            ZStack{
+                Text("\(self.userData.mockCurrency, specifier: "%0.2f")").position(x: X, y: Y*0.2)
+                Text("Purchase Price: $\(self.stockInfo.stockTicker.last?.regularMarketPrice ?? 0.0, specifier: "%0.2f" )").position(x: X, y: Y*0.8)
+                Text("How Many Shares Would You Like To Purchase?").position(x: X, y: Y*0.9)
+                TextField("Shares", value: $shares, formatter: formatter)
+                    .keyboardType(.numberPad)
+                    .position(x: X, y: Y)
+                    .padding(EdgeInsets(top: 0, leading: 80, bottom: 0, trailing: 100))
+                Button{
+                    if (self.userData.mockCurrency - (Double(self.shares) * (self.stockInfo.stockTicker.last?.regularMarketPrice)!) > 0){
+                        self.userData.appendData(ticker: self.stockInfo.ticker!, shares: self.shares, boughtPrice: (self.stockInfo.stockTicker.last?.regularMarketPrice)!)
+                        self.userData.writeFile()
+                        self.userData.loadFile()
+                    }else{
+                        print("not enough money!")
+                    }
+                }label:{
+                    RoundedRectangle(cornerRadius: 8)
+                        .opacity($shares.wrappedValue > 0 ? 1.0 : 0.5)
+                        .foregroundColor(.pink)
+                        .frame(width: 100, height: 40)
+                        .overlay(
+                            Text("Confirm Order")
+                                .bold()
+                                .foregroundColor(.white)
+                    )
+                }.position(x: X, y: Y*1.2)
+                    .disabled($shares.wrappedValue > 0 ? false : true)
             }
         }
     }
-}
+} // Struct View
 
 
 @available(iOS 16.0, *)

@@ -23,6 +23,8 @@ import XCAStocksAPI
     @Published var ticker: String?
     @Published var range: ChartRange?
     @Published var isLoaded = false
+    @Published var loadedQuote = false
+    @Published var result = 0.0
     // variables below are for market time comparison
     let calendar = Calendar.current
     let now = Date()
@@ -113,6 +115,12 @@ import XCAStocksAPI
         }
     }
     
+    @MainActor func loadTickerforUser(ticker: String){
+        Task{
+            let api = XCAStocksAPI()
+            self.result = try await api.fetchQuotes(symbols: ticker).last!.regularMarketPrice!
+        }
+    }
     
     func loadTicker(){
         Task{

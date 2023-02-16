@@ -12,97 +12,101 @@ struct tutorialViews: View {
     @StateObject private var tutorial = appStorage()
     
     var body: some View {
-        VStack{
-            Text("Welcome to The 'Mock Market', our app specializes in educating individuals about learning about and trading in the stock market, to begin choose your education level")
-                .font(.custom("American Typewriter", size: 20))
-                .multilineTextAlignment(.center)
-            
-            HStack{
-                Button{
-                    print("lul")
-                }label:{
-                    Text("Experienced")
-                        .foregroundColor(.appColorWhite)
-                        .background(RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.appColorBlack)
-                            .padding(EdgeInsets(top: 0, leading: -10, bottom: 0, trailing: -10))
-                        )
+        GeometryReader { geo in
+            ZStack {
+                VStack{
+                    Image("logo")
+                        .resizable()
+                        .frame(width: 150, height: 100)
+                        .offset(x: 20)
+                    Text("Welcome to")
+                        .font(.custom("American Typewriter", fixedSize: 40))
+                        .foregroundColor(.appColorBlack)
+                        .multilineTextAlignment(.center)
+                        .shadow(radius: 10)
+                    Text("Mock Market")
+                        .font(.custom("American Typewriter", fixedSize: 50).bold())
+                        .foregroundColor(.appColorBlack)
                     
-                }
-                .opacity(0.5)
-                .padding()
-                Button{
-                    navTut2 = true
-                }label:{
-                    Text("New to Stocks")
-                        .foregroundColor(.appColorWhite)
-                        .background(RoundedRectangle(cornerRadius: 10)
+                    Button{
+                        navTut2 = true
+                    }label:{
+                        Text("Let's jump in")
+                            .font(.custom("American Typewriter", fixedSize: 20))
                             .foregroundColor(.appColorBlack)
-                            .padding(EdgeInsets(top: 0, leading: -10, bottom: 0, trailing: -10))
-                        )
+                            .background{
+                                rectangleBackground(width: 200, height: 50, radiusOfCorners: 10)
+                            }
+                    }.padding(EdgeInsets(top: 100, leading: 0, bottom: 0, trailing: 0))
+                }.position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY)
                     
-                }
-            }
-        }.onAppear{
-            
-        }.navigate(to: tutorialView2(), when: $navTut2)
-            .navigate(to: tabView(), when: $tutorial.isTutorialComplete)
+                
+                
+                
+                
+                Image("dashedLines")
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                    .position(x: geo.frame(in: .global).maxX/1.15, y: geo.frame(in: .global).minY/50)
+                    
+            }.navigate(to: tutorialView2(), when: $navTut2)
+        }
     }
 }
 
-            
-            /// Commented out code to come back to
-            //Text("\(test.description)")
-            //Text("\(tutorial.isTutorialComplete.description)")
-            //            HStack{
-            //                Button{
-            //                    test = true
-            //                    tutorial.isTutorialComplete = true
-            //                }label:{
-            //                    Text("Tutorial Complete")
-            //                        .foregroundColor(.green)
-            //                }
-            //
-            //                Button{
-            //                    test = false
-            //                    tutorial.isTutorialComplete = false
-            //                }label:{
-            //                    Text("Tutorial not complete")
-            //                        .foregroundColor(.red)
-            //                }
-            //            }
-            //        }.onAppear{
-            ////.navigate(to: StockPage(), when: $tutorial.isTutorialComplete)
 
 struct tutorialView2: View{
     @StateObject private var tutorial = appStorage()
+    @State var goToLevel1 = false
+    
     var body: some View{
         VStack{
-            Text("Let’s begin with the basics, a stock is a small fraction of a company that you can buy into. With this you are supporting the company and also becoming a very small owner of that company. Stocks go up and down, this is because of more people buying and selling shares. The less amount of people buying a stock the less its worth. ")
-                .font(.custom("American Typewriter", size: 24))
-                .multilineTextAlignment(.center)
-            Spacer()
-            Text("Still confused? Don’t worry, let’s go more in depth.")
-            Spacer()
-            Button{
-                tutorial.isTutorialComplete = true
-            }label:{
-                Text("Next Page")
-                    .foregroundColor(.appColorWhite)
-                    .background(RoundedRectangle(cornerRadius: 10)
-                        .foregroundColor(.appColorBlack)
-                        .padding(EdgeInsets(top: 0, leading: -10, bottom: 0, trailing: -10))
-                    )
+            ZStack {
+                GeometryReader { geo in
+                    Image("blank")
+                        .resizable()
+                        
+                        .background{
+                            tutorialBuilding()
+                                
+                                .opacity(0.5)
+                                
+                        }.frame(width:geo.size.width, height: geo.size.height+150)
+                        .fixedSize()
+                    .ignoresSafeArea()
+                }
                 
+                GeometryReader { geo in
+                    Text("This is your building, Advance through the training to upgrade your knowledge and portfolio, to begin lets jump into the first level")
+                        .foregroundColor(.appColorBlack)
+                        .font(.custom("American Typewriter", fixedSize: 25))
+                        .multilineTextAlignment(.center)
+                        .padding(EdgeInsets(top: 0, leading: 45, bottom: 0, trailing: 45))
+                        .background{
+                            rectangleBackground(width: 360, height: 250, radiusOfCorners: 10)
+                                
+                        }.position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY/3)
+                    
+                    Button{
+                        goToLevel1 = true
+                    }label:{
+                        Text("Advance to\n Level 1")
+                            .foregroundColor(.appColorBlack)
+                            .multilineTextAlignment(.center)
+                            .font(.custom("American Typewriter", fixedSize: 25))
+                            .background{
+                                rectangleBackground(width: 150, height: 75, radiusOfCorners: 10)
+                            }
+                        
+                    }.position(x: geo.frame(in: .global).midX*1.5, y: geo.frame(in: .global).maxY/1.2)
+                }
             }
-        }.onAppear{
-            ///will eventually be to education page but for right now it just goes to our main pages, since we havent set all dat up yet
-        }.navigate(to: StockPage(), when: $tutorial.isTutorialComplete)
+        }.navigate(to: tutorialLevel1(), when:$goToLevel1)
     }
 }
 
 struct tutorialViews_Previews: PreviewProvider {
     static var previews: some View {
-        tutorialViews()
+        tutorialView2()
     }
 }
