@@ -55,7 +55,7 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             GroupBox{
-                ProgressView("we should make this a splash screen eventually ;)")
+                ProgressView("Loading Data")
                     .multilineTextAlignment(.center)
                     .progressViewStyle(.circular)
                     .padding()
