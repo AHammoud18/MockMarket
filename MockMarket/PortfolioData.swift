@@ -14,12 +14,18 @@ import System
 class Portfolio: ObservableObject{
     static let data = Portfolio()
     private var json: JSON = []
-    private var jsonIndicides: Int?
+    private var jsonIndicides: Int = 0
     @StateObject var stockData = StockData()
+    @AppStorage ("did_purchase") var purchasedShare = false
     @AppStorage ("file_check") var fileExist: Bool?
+    @AppStorage ("deleteEmpty") var emptyJSON: Bool = true
+    @AppStorage ("currency") var mockCurrency = 1500.00
+    @AppStorage ("user_value") var userValue = 0.0
+    @AppStorage ("key_duplicate") var keyDupe = 0
     //@Published var userData: [String : [Int : Double]] = [:]
-    @Published var userData: [JSON]?
+    @Published var userData = [JSON()]
     @Published var userPortfolio: [String : [Int : Double]] = [:]
+
     let perms = FilePermissions(rawValue: 0o644)
     //var appPath = Bundle.main.resourceURL
     func appDirectory() -> URL{
@@ -37,7 +43,7 @@ class Portfolio: ObservableObject{
                 loadFile()
             }else{
                 print("No file! Creating One...")
-                emptyFile()
+                createFile()
                 loadFile()
             }
         }
@@ -47,21 +53,47 @@ class Portfolio: ObservableObject{
     // function to load file within app's directory
     // this should only happen once
     func loadFile(){
+        self.userData = [JSON()]
         let path = appDirectory().appendingPathComponent("TestData.json")
         let data = JSON(NSData(contentsOf: path))
-        userData = [data]
-        for i in 0..<userData![0].count{
-            //print(userData[0][i+1]["ticker"])
-            userPortfolio.updateValue([userData![0][i+1]["shares"].intValue : userData![0][i+1]["bought_price"].doubleValue], forKey: userData![0][i+1]["ticker"].stringValue)
+        for i in 0..<data.count{
+            if !data[i].isEmpty{
+                print("empty json at: \(i)")
+                self.userData.insert(data[i], at: i)
+            }
         }
+        for i in 0..<self.userData.count-1{
+            //print(userData[0][i+1]["ticker"])
+            self.userPortfolio.updateValue([userData[i]["shares"].intValue : userData[i]["bought_price"].doubleValue], forKey: userData[i]["ticker"].stringValue)
+            self.jsonIndicides += 1
+        }
+        print(userData)
         //return [data]
     }
     
     // new stock purchases will be added here
     @MainActor func appendData(ticker: String, shares: Int, boughtPrice: Double){
-        let frame = jsonFrame(ticker: ticker, shares: shares, boughtPrice: boughtPrice)
-        let data = JSON(frame.createFrame())
-        userData!.append(data)
+        self.mockCurrency -= (Double(shares) * boughtPrice)
+        if userPortfolio.keys.contains(ticker){
+            let frame = jsonFrame(ticker: "\(ticker) \(self.keyDupe)", shares: shares, boughtPrice: boughtPrice)
+            self.keyDupe += 1
+            let data = JSON(frame.createFrame())
+            self.userData.insert(data, at: self.jsonIndicides)
+            print(data)
+        }else{
+            let frame = jsonFrame(ticker: ticker, shares: shares, boughtPrice: boughtPrice)
+            let data = JSON(frame.createFrame())
+            self.userData.insert(data, at: self.jsonIndicides)
+            print(data)
+        }
+        let lastIndex = self.userData.endIndex
+        self.purchasedShare = true
+        if self.emptyJSON == true{
+            print("removed")
+            self.userData.remove(at: lastIndex-1)
+            self.emptyJSON = false
+        }
+
     }
     
     @MainActor func removeData(){
@@ -72,8 +104,8 @@ class Portfolio: ObservableObject{
     @MainActor func writeFile(){
         let path = appDirectory().appendingPathComponent("TestData.json")
         do{
-            let data = "\(userData!.map{$0})"
-            print(data)
+            //try FileManager.default.removeItem(at: path)
+            let data = "\(userData.map{$0})"
             try data.write(to: path, atomically: true, encoding: .utf8)
             print("successfully written to \(path)")
         }catch{
@@ -81,11 +113,10 @@ class Portfolio: ObservableObject{
         }
     }
     
-    // delete all user data
-    @MainActor func emptyFile(){
+    // create an empty json
+    @MainActor func createFile(){
         let path = appDirectory().appendingPathComponent("TestData.json")
         do{
-            userData = [JSON()]
             //let data = "\(userData![0].map{$0})"
             let data = ""
             try data.write(to: path, atomically: true, encoding: .utf8)
@@ -94,12 +125,29 @@ class Portfolio: ObservableObject{
             print(error.localizedDescription)
         }
     }
+
+    
+    // delete all user data
+    @MainActor func deleteFile(){
+        let path = appDirectory().appendingPathComponent("TestData.json")
+        do{
+            try FileManager.default.removeItem(at: path)
+            self.jsonIndicides = 0
+            //let data = "\(userData![0].map{$0})"
+            /*let data = ""
+            try data.write(to: path, atomically: true, encoding: .utf8)*/
+            print("successfully emptied file at \(path)")
+        }catch{
+            print(error.localizedDescription)
+        }
+    }
     
     // display json for bug testing
-    @MainActor func displayFile(){
-        print(userData!)
+    func displayFile(){
+        print(userData)
         print(userPortfolio)
     }
+    
   
     
 }

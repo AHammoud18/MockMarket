@@ -66,8 +66,32 @@ struct MarketView: View{
                         Text("\(symbol)").searchCompletion(symbol)
                     }
                 }
-            }
-            .overlay(
+            }.overlay(
+                GeometryReader{ geo in
+                    ZStack{
+                        Text("\(self.userData.userData.last!.rawString() ?? "JSON Here")")
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(5)
+                            .lineSpacing(1.0)
+                            .frame(width: geo.size.width, height: geo.size.height)
+                        Button{
+                            
+                        }label: {
+                            Text("Display Json")
+                                .foregroundColor(.black)
+                                .bold()
+                        }.position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY*0.8)
+                        Button{
+                            self.userData.deleteFile()
+                        }label: {
+                            Text("Delete File")
+                                .foregroundColor(.red)
+                                .bold()
+                        }.position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY*0.9)
+                    }.position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY)
+                }
+            )
+            /*.overlay(
                 GeometryReader{ geo in
                     VStack(spacing: 1){
                         Section{
@@ -102,17 +126,15 @@ struct MarketView: View{
                     }
                 }
                 
-            )
-            //.opacity(self.searchAppear ? 0.0 : 1.0)
+            )*/
         }.searchable(text: $searchTicker)
-            .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
+        .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
                LoadingScreen()
             }
             .onAppear{
-                
-                self.userData.checkFile()
+                //self.userData.checkFile()
                 //self.userData.writeFile()
-                //self.dataSet.loadFile()
+                self.dataSet.loadFile()
             }
         
     }
