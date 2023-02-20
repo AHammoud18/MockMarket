@@ -31,7 +31,7 @@ struct tabView: View {
                         //Text("test2")
                     }.tag(2)
                 
-                marketNewsView()
+                MarketView()
                     .onTapGesture {
                         selectedTab = 3
                     }

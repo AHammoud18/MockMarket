@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "swiftui-introspect",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect",
+      "state" : {
+        "revision" : "0ee6d36368422aa2fef62fc41a86a179abe46ef1",
+        "version" : "0.2.2"
+      }
+    },
+    {
       "identity" : "swiftyjson",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",

@@ -60,13 +60,14 @@ struct MarketView: View{
             List{
                 ForEach(tickerResults, id: \.self) { symbol in
                     Button{
+                        print("Clicked")
                         self.stockInfo.ticker = self.dataSet.Nasdaq[symbol]
                         self.didSelectStock = true
                     }label:{
                         Text("\(symbol)").searchCompletion(symbol)
                     }
                 }
-            }.overlay(
+            }/*.overlay(
                 GeometryReader{ geo in
                     ZStack{
                         Text("\(self.userData.userData.last!.rawString() ?? "JSON Here")")
@@ -90,7 +91,7 @@ struct MarketView: View{
                         }.position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY*0.9)
                     }.position(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).midY)
                 }
-            )
+            )*/
             /*.overlay(
                 GeometryReader{ geo in
                     VStack(spacing: 1){
@@ -131,12 +132,10 @@ struct MarketView: View{
         .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
                LoadingScreen()
             }
-            .onAppear{
-                //self.userData.checkFile()
-                //self.userData.writeFile()
-                self.dataSet.loadFile()
-            }
-        
+        .onAppear{
+            self.dataSet.loadFile()
+
+        }
     }
     
     var tickerResults: [String]{

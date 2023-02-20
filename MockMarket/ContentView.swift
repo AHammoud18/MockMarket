@@ -46,6 +46,7 @@ extension Color{
 struct ContentView: View {
     @StateObject private var tutorial = appStorage()
     @StateObject var stockData = StockData.data
+    @StateObject var portfolio = Portfolio.data
     @State private var progress: Double = 0.0
     @State var letLoadAndTutIsComplete = false
     @State var letLoadButTutIsntComplete = false
@@ -74,6 +75,7 @@ struct ContentView: View {
                     }
             }
         }.onAppear{
+            self.portfolio.checkFile()
             //stockData.loadStock()
             //stockData.loadTicker()
             

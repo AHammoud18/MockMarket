@@ -12,7 +12,6 @@ import SwiftUI
 struct MockMarket: App {
     var body: some Scene {
         WindowGroup {
-            
             ContentView()
             //MarketView()
         }

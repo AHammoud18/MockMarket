@@ -46,35 +46,6 @@ struct StockPage: View{
     let timer = Timer.publish(every: 10.00, on: .main, in: .common).autoconnect()
     let times = ["22-12-27", "23-01-27"]
     
-//    @State var currentGraphTab: dateGraphTab = .today
-//    enum dateGraphTab{
-//        case today
-//        case oneWk
-//        case oneMo
-//        case sixMo
-//        case oneYr
-//        case all
-//    }
-//
-//    func switchGraphTab() -> String{
-//        ///eventually change these to graphs not strings
-//        switch self.currentGraphTab {
-//        case .today:
-//            return "Today"
-//        case .oneWk:
-//            return "OneWk"
-//        case .oneMo:
-//            return "OneMo"
-//        case .sixMo:
-//            return "YTD"
-//        case .oneYr:
-//            return "oneYR"
-//        case .all:
-//            return "all"
-//        }
-//
-//    }
-    
     
     @State private var isActive = false
     var body: some View{
@@ -124,7 +95,7 @@ struct StockPage: View{
                         }
                         .frame(height:75)
                         //.fixedSize(horizontal: false, vertical: true)
-                        
+                        // this is the holdings box that displays shares that the user has purchased
                         VStack{
                             HStack {
                                 Text("Current Holdings")
@@ -132,17 +103,44 @@ struct StockPage: View{
                                     .padding(.leading)
                                     .accessibilityLabel("Current Holdings")
                             }
-                            
+                                GroupBox{
+                                    ScrollView(showsIndicators: false){
+                                        VStack(spacing: 12){
+                                            ForEach(0..<userTickers.count, id: \.self){ value in
+                                                Text("\(self.userValue[value])")
+                                                Text("\(self.userTickers[value])")
+                                                    .offset(x: -135, y: -6)
+                                                    .font(.custom("American Typewriter", size: 20).bold())
+                                                    .padding(.leading)
+                                                    .accessibilityLabel(self.userTickers[value])
+                                                    .overlay(
+                                                        Text("\(self.userShares[value]) shares")
+                                                            .offset(x: -125, y: 12)
+                                                            .font(Font.system(size: 14))
+
+                                                    )
+                                                Divider()
+                                            }
+                                        }
+                                    }.padding()
+                                }.groupBoxStyle(ChartBox())
+                                    .position(x: geo.frame(in: .local).midX, y: geo.frame(in: .global).minY*2)
+                                    .frame(width: geo.size.width/1.1, height: geo.size.height/3.2)
+                                
                             
                             
                         }.padding(EdgeInsets(top: 50, leading: 0, bottom: 0, trailing: 0))
                     }
+                } // scroll view
+                .introspectScrollView(){scroller in
+                    scroller.bounces = false
                 }
             }
 //            .sheet(isPresented: $didSelectStock, onDismiss: { self.stockInfo.deintitStock() }){
 //                LoadingScreen()
 //            }
         //}
+        // Refresh the user portfolio every 10 seconds
             .onReceive(timer){ _ in
                 if self.portfolio.purchasedShare == true{
                     Task{
@@ -151,8 +149,9 @@ struct StockPage: View{
                 }
                 
             }
+        
+        // Collect the user info from the JSON when this view loads
             .onAppear{
-                self.portfolio.checkFile()
                 //self.userData.writeFile()
                 if self.portfolio.purchasedShare == true{
                     self.getUserValue()
@@ -160,19 +159,27 @@ struct StockPage: View{
                 
             }
     }
+    
+    // sorting the collected JSON data into arrays to display
     func getUserValue(){
+        var i = 0
+        self.userTickers = []
+        self.userBP = []
+        self.userShares = []
         for (tickers, values) in self.portfolio.userPortfolio{
-            self.userTickers.append(tickers)
+            self.userTickers.insert(tickers, at: i)
             for (shares, bought_price) in values{
                 print("shares: \(shares) bought: \(bought_price)")
-                self.userBP.append(bought_price)
-                self.userShares.append(shares)
+                self.userBP.insert(bought_price, at: i)
+                self.userShares.insert(shares, at: i)
                 //self.userValue = self.stockData.stockTicker.last?.regularMarketPrice Double(shares) * bought_price
                 print("User Bought Prices: \(self.userBP)")
                 print("User Shares: \(self.userShares)")
                 print("User Tickers: \(self.userTickers)")
             }
+            i += 1
         }
+        valueCalc()
     }
     
     
@@ -181,12 +188,11 @@ struct StockPage: View{
         self.collectedResults = []
         self.portfolio.userValue = 0.0
         for i in 0..<self.userTickers.count{
+            self.stockInfo.currentPrices!.append(0.0)
             self.stockInfo.loadTickerforUser(ticker: self.userTickers[i])
-            print(self.stockInfo.result)
-            self.collectedResults.insert(((max(self.stockInfo.result, self.userBP[i]) - min(self.stockInfo.result, self.userBP[i]))) * Double(self.userShares[i]), at: i)
+            print("prices: \(self.stockInfo.currentPrices![i])")
+            self.collectedResults.insert((self.stockInfo.currentPrices![i] - self.userBP[i]) * Double(self.userShares[i]), at: i)
         }
-        print(self.userShares)
-        print(self.collectedResults)
         for i in 0..<collectedResults.count{
             self.portfolio.userValue += collectedResults[i]
         }
@@ -195,7 +201,8 @@ struct StockPage: View{
         
 
 
-
+// loading screen while stock info loads in the background, this screen navigates to the stock view when everything
+// has been loaded
 struct LoadingScreen: View{
     @State var loadedStock = false
     @State private var progress: Double = 0.0
@@ -227,7 +234,7 @@ struct LoadingScreen: View{
         }.navigate(to: CompanyStockView(), when: $loadedStock)
         
     }
-    
+    // run this function when the loading screen appears
     func loadStock(){
         self.stockInfo.range = .oneDay
         self.stockInfo.grabStockInfo()
@@ -235,6 +242,8 @@ struct LoadingScreen: View{
     }
 }
 
+
+// the stock view that shows after everything has loaded
 @available(iOS 16.0, *)
 struct CompanyStockView: View{
     @StateObject var stockInfo = StockData.data
@@ -363,6 +372,8 @@ struct CompanyStockView: View{
         } // Geo Reader
     } // Body View
     
+    
+    // display the purhcase page when the user buys/sells their stock
     var purchasePage : some View{
         GeometryReader{ geo in
             let X = geo.frame(in: .global).midX
@@ -402,6 +413,8 @@ struct CompanyStockView: View{
 } // Struct View
 
 
+
+// the style of the box
 @available(iOS 16.0, *)
 struct ChartBox: GroupBoxStyle{
         @StateObject var stockInfo = StockData.data

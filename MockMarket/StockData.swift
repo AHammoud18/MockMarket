@@ -20,6 +20,7 @@ import XCAStocksAPI
     @Published var stockPrice: [[Double]] = [[], [], [], [], [], []] // matrix of Prices [0] = Day, [1] = week, [2] = month...etc...
     @Published var stockDates: [[String]] = [[], [], [], [], [], []] // matrix of Dates [0] = Day, [1] = week, [2] = month...etc...
     @Published var stockDayTimes: [String] = []
+    @Published var currentPrices: [Double]? = []
     @Published var ticker: String?
     @Published var range: ChartRange?
     @Published var isLoaded = false
@@ -117,8 +118,11 @@ import XCAStocksAPI
     
     @MainActor func loadTickerforUser(ticker: String){
         Task{
+            self.currentPrices = []
             let api = XCAStocksAPI()
             self.result = try await api.fetchQuotes(symbols: ticker).last!.regularMarketPrice!
+            print("results: \(self.result)")
+            self.currentPrices?.append(self.result)
         }
     }
     
