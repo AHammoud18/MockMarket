@@ -102,6 +102,7 @@ struct educationView: View {
                                 ZStack{
                                     
                                     // below is an image placeholder
+                                    Button{print("clicked")}label:{}.frame(width: geo.size.width/1.7, height: geo.size.height/4)
                                     RoundedRectangle(cornerRadius: 16).frame(width: geo.size.width/1.7,height: geo.size.height/4.5)
                                         .foregroundColor(Color.appColorWhite)
                                         .offset(y: -125)

@@ -31,7 +31,7 @@ struct StockPage: View{
     @State var userValue = [14.50, 12.00, 18.25, 22.50, 8.00, 45.00]
     @State var userDates = ["23-1-11","23-1-13","23-1-14","23-1-16","23-1-20","23-1-22"]
     @State var priceColor = true
-    @State var totalWorth = 400
+    @State var totalWorth = 0
     @State var percentChange = 4.3
     @StateObject var stockInfo = StockData.data
     @StateObject var pointPos = indicatorPos.data
@@ -71,7 +71,7 @@ struct StockPage: View{
                         ZStack {
                             portfolioChartView()
                             VStack(alignment: .leading) {
-                                Text("$\(totalWorth)")
+                                Text("$\(self.portfolio.userTotal)")
                                     .font(.custom("American Typewriter", size: 40).bold())
                                     .dynamicTypeSize(.xxxLarge)
                                 HStack {
@@ -85,7 +85,7 @@ struct StockPage: View{
                             }
                             .position(x: geo.frame(in: .local).minX/2, y: geo.frame(in: .local).minY)
                                 .accessibilityElement(children: .combine)
-                                .accessibilityLabel("Current Value: \(totalWorth) dollars, up \(percentChange.formatted()) percent")
+                                .accessibilityLabel("Current Value: \(self.portfolio.userTotal) dollars, up \(percentChange.formatted()) percent")
                                 .fixedSize()
                                 
                         }
@@ -186,7 +186,7 @@ struct StockPage: View{
     // calculate user gain/loss after purhcase of stock
     func valueCalc(){
         self.collectedResults = []
-        self.portfolio.userValue = 0.0
+        self.portfolio.userTotal = 0.0
         for i in 0..<self.userTickers.count{
             self.stockInfo.currentPrices!.append(0.0)
             self.stockInfo.loadTickerforUser(ticker: self.userTickers[i])
@@ -194,7 +194,7 @@ struct StockPage: View{
             self.collectedResults.insert((self.stockInfo.currentPrices![i] - self.userBP[i]) * Double(self.userShares[i]), at: i)
         }
         for i in 0..<collectedResults.count{
-            self.portfolio.userValue += collectedResults[i]
+            self.portfolio.userTotal += collectedResults[i]
         }
     }
 }

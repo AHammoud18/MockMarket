@@ -20,7 +20,7 @@ class Portfolio: ObservableObject{
     @AppStorage ("file_check") var fileExist: Bool?
     @AppStorage ("deleteEmpty") var emptyJSON: Bool = true
     @AppStorage ("currency") var mockCurrency = 1500.00
-    @AppStorage ("user_value") var userValue = 0.0
+    @AppStorage ("user_value") var userTotal = 0.0
     @AppStorage ("key_duplicate") var keyDupe = 0
     //@Published var userData: [String : [Int : Double]] = [:]
     @Published var userData = [JSON()]
