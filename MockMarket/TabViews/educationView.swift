@@ -102,7 +102,11 @@ struct educationView: View {
                                 ZStack{
                                     
                                     // below is an image placeholder
-                                    Button{print("clicked")}label:{}.frame(width: geo.size.width/1.7, height: geo.size.height/4)
+                                    Button{
+                                        print("clicked")
+                                        self.toTutorialBuilding.toggle()
+                                        
+                                    }label:{Rectangle().frame(width: geo.size.width/1.7, height: geo.size.height/4).opacity(0.0)}
                                     RoundedRectangle(cornerRadius: 16).frame(width: geo.size.width/1.7,height: geo.size.height/4.5)
                                         .foregroundColor(Color.appColorWhite)
                                         .offset(y: -125)
@@ -246,11 +250,14 @@ struct educationView: View {
             )
         }.ignoresSafeArea()
             .background(Color.appColorWhite)
-        /*
+            /*.fullScreenCover(isPresented: $toTutorialBuilding){
+                tutorialBuilding()
+            }*/
+            
         .navigate(to: tutorialBuilding(), when: $toTutorialBuilding)
-        .navigate(to: tutorialBuilding(), when: $a.isTutorialComplete.not)*/
+        //.navigate(to: tutorialBuilding(), when: $a.isTutorialComplete.not)
         
-        
+            
     }
 }
 

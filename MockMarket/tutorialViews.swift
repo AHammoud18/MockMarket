@@ -101,7 +101,7 @@ struct tutorialView2: View{
                     }.position(x: geo.frame(in: .global).midX*1.5, y: geo.frame(in: .global).maxY/1.2)
                 }
             }
-        }.navigate(to: tutorialLevel1(), when:$goToLevel1)
+        }.navigate(to: beginnerLevel(), when:$goToLevel1)
     }
 }
 

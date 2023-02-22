@@ -12,8 +12,10 @@ import SwiftUI
 struct MockMarket: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            //tutorialBuilding()
+            //ContentView()
             //MarketView()
+            tabView()
         }
     }
 }

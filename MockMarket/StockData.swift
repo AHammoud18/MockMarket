@@ -10,7 +10,6 @@ import SwiftUI
 import XCAStocksAPI
 
 
-
 @available(iOS 16.0, *)
 @MainActor class StockData: ObservableObject{
     static let data = StockData()
@@ -120,7 +119,8 @@ import XCAStocksAPI
         Task{
             self.currentPrices = []
             let api = XCAStocksAPI()
-            self.result = try await api.fetchQuotes(symbols: ticker).last!.regularMarketPrice!
+            let ticker = ticker.components(separatedBy: " ").first
+            self.result = try await api.fetchQuotes(symbols: ticker!).last!.regularMarketPrice!
             print("results: \(self.result)")
             self.currentPrices?.append(self.result)
         }

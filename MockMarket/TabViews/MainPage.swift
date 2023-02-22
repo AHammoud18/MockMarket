@@ -272,7 +272,7 @@ struct CompanyStockView: View{
                     .foregroundColor(.appColorBlack)
                     .font(Font.system(size: 20))
                     .bold()
-                Text(self.stockInfo.stockTicker.last?.displayName ?? "company")
+                Text((self.stockInfo.stockTicker.last?.displayName ?? "company"))
                     .foregroundColor(.appColorBlack)
                 Divider()
                 ScrollView(showsIndicators: false){

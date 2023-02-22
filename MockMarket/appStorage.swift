@@ -10,6 +10,7 @@ import SwiftUI
 
 class appStorage: ObservableObject{
     @AppStorage("isTutComplete") var isTutorialComplete = false
+    @AppStorage("toMainPage") var isFirstTutorial = false
     
     // MARK: Tutorial Building
     @AppStorage("tutorialPopup") var tutorialPopup = true
