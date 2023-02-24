@@ -13,9 +13,9 @@ struct MockMarket: App {
     var body: some Scene {
         WindowGroup {
             //tutorialBuilding()
-            //ContentView()
+            ContentView()
             //MarketView()
-            tabView()
+            //tabView()
         }
     }
 }

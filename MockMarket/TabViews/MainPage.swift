@@ -45,44 +45,57 @@ struct StockPage: View{
     let currentDate = DateFormatter()
     let timer = Timer.publish(every: 10.00, on: .main, in: .common).autoconnect()
     let times = ["22-12-27", "23-01-27"]
-    
+    @State private var mockMoney = ""
     
     @State private var isActive = false
     var body: some View{
         //VStack{
             GeometryReader { geo in
-                //let X = geo.frame(in: .global).midX
-                //let Y = geo.frame(in: .global).midY
+                let X = geo.frame(in: .local)
+                let Y = geo.frame(in: .local)
                 
                 
                 //MARK: Portfolio Top Graph
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     VStack(alignment:.leading){
-                        VStack{
+                        HStack{
                             Text("My Portfolio")
                                 .font(.custom("American Typewriter", size: 24).bold())
                                 .padding(.leading)
                                 .accessibilityLabel("My Portfolio")
-                            
+                            GroupBox{
+                                Text(self.mockMoney)
+                                    .font(.custom("American Typewriter", size: 18).bold())
+                                    .multilineTextAlignment(.trailing)
+                                    .accessibilityLabel(self.mockMoney)
+                                    .offset(x: 8, y: 4)
+                            }.frame(width: geo.size.width/4 + CGFloat(self.mockMoney.count * 2))
+                            .groupBoxStyle(ChartBox())
+                            .position(x: X.midX*0.6, y: Y.minY*1.2)
                         }
-                        
+                        .onAppear{
+                            self.mockMoney = "\(self.portfolio.mockCurrency)"
+                        }
                         .padding(.top)
                         
                         ZStack {
                             portfolioChartView()
                             VStack(alignment: .leading) {
-                                Text("$\(self.portfolio.userTotal)")
+                                Text("$\(self.portfolio.userTotal, specifier: "%0.2f")")
                                     .font(.custom("American Typewriter", size: 40).bold())
-                                    .dynamicTypeSize(.xxxLarge)
+                                    .dynamicTypeSize(.medium)
+                                    .multilineTextAlignment(.leading)
                                 HStack {
                                     Image(systemName: "triangle.fill")
                                         .foregroundColor(.green)
                                     Text(" %\(percentChange.formatted())")
                                         .foregroundColor(.green)
+                                        .multilineTextAlignment(.leading)
                                     .font(.system(size: 25))
-                                }.dynamicTypeSize(.xxxLarge)
+                                }.dynamicTypeSize(.medium)
                                 
-                            }
+                            }.position(x: X.minX*1.2, y: Y.minY)
+                                .offset(y: -22)
                             .position(x: geo.frame(in: .local).minX/2, y: geo.frame(in: .local).minY)
                                 .accessibilityElement(children: .combine)
                                 .accessibilityLabel("Current Value: \(self.portfolio.userTotal) dollars, up \(percentChange.formatted()) percent")
