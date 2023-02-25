@@ -84,6 +84,7 @@ struct ChartLineView: View{
             self.stockInfo.ticker = ticker
             loadStock()
             }
+        
         }
     
     func loadStock(){
@@ -101,6 +102,8 @@ struct ChartLineView: View{
                         hours: self.stockInfo.stockDayTimes,
                         indicatorPointColor: self.pointPos.indicatorColor,
                         dragGesture: false
-                    ))
+                    )).onReceive(timer){ _ in
+                        self.stockInfo.getTime()
+                }
     }
 }
